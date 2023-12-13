@@ -1,0 +1,14 @@
+//
+// Created by pavel on 13.12.2023.
+//
+
+#ifndef CHESSALGORITHMBITBOARDS_BOARD_H
+#define CHESSALGORITHMBITBOARDS_BOARD_H
+
+
+class Board {
+
+};
+
+
+#endif //CHESSALGORITHMBITBOARDS_BOARD_H
