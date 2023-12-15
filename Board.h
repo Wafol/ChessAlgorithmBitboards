@@ -1,7 +1,3 @@
-//
-// Created by pavel on 13.12.2023.
-//
-
 #ifndef CHESSALGORITHMBITBOARDS_BOARD_H
 #define CHESSALGORITHMBITBOARDS_BOARD_H
 
@@ -20,11 +16,13 @@ public:
 
     Board();
 
-private:
-    //8x8 char board
-    void arrayToBitboards(char (&board)[8][8]);
+    void bitboardsToArray(char (&dest_board)[8][8]);
 
-    PieceType charToPieceEnum(char char_piece);
+private:
+    void arrayToBitboards(char (&src_board)[8][8]);
+
+    static PieceType charToPieceEnum(char char_piece);
+    static char pieceEnumToChar(PieceType piece_type);
 };
 
 

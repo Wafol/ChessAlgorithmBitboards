@@ -61,6 +61,12 @@ build CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj: CXX_COMPILER__ChessA
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
   OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
 
+build CMakeFiles/ChessAlgorithmBitboards.dir/BoardUI.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/BoardUI.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\BoardUI.cpp.obj.d
+  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ChessAlgorithmBitboards
@@ -69,7 +75,7 @@ build CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj: CXX_COMPILER__ChessA
 #############################################
 # Link the executable ChessAlgorithmBitboards.exe
 
-build ChessAlgorithmBitboards.exe: CXX_EXECUTABLE_LINKER__ChessAlgorithmBitboards_Debug CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj
+build ChessAlgorithmBitboards.exe: CXX_EXECUTABLE_LINKER__ChessAlgorithmBitboards_Debug CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/BoardUI.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir

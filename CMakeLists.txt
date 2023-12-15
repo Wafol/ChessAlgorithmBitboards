@@ -4,4 +4,6 @@ project(ChessAlgorithmBitboards)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(ChessAlgorithmBitboards main.cpp
-        Board.cpp)
+        Board.cpp
+        BoardUI.h
+        BoardUI.cpp)
