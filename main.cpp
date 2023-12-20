@@ -2,18 +2,29 @@
 #include <bitset>
 #include "Board.h"
 #include "BoardUI.h"
+#include "MovesGeneration.h"
+#include "OneMove.h"
 
 int main() {
     Board board;
 
-    for (int i = 0; i < 12; i++) {
-        std::cout << std::bitset<64>(board.bitboards[i]) << std::endl;
-    }
+    //for (int i = 0; i < 12; i++) {
+    //    std::cout << std::bitset<64>(board.bitboards[i]) << std::endl;
+    //}
 
-    char char_board[8][8];
+    BoardUI::drawBitboards(board.bitboards);
 
-    board.bitboardsToArray(char_board);
-    BoardUI::drawBoard(char_board);
+    std::cout << std::endl << std::endl;
+
+    MovesGeneration moves_gener;
+    std::vector<OneMove> moves = moves_gener.generatePieceMoves(board.bitboards, Board::P);
+
+    std::cout << std::endl << std::endl;
+    BoardUI::printMoves(moves);
+
+
+
+    //BoardUI::drawBoard(char_board);
 
 
 

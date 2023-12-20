@@ -7,12 +7,12 @@ Board::Board() {
 
     char board[8][8] = {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
-            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+            {' ', ' ', 'p', 'p', 'p', 'p', 'p', 'p'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+            {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}};
 
     arrayToBitboards(board);
@@ -30,9 +30,10 @@ void Board::arrayToBitboards(char (&src_board)[8][8]) {
     }
 }
 
-void Board::bitboardsToArray(char (&dest_board)[8][8]) {
+void Board::bitboardsToArray(char (&dest_board)[8][8], uint64_t (&bitboards)[12]) {
     for (int i = 0; i < 64; i++) {
         dest_board[i/8][i%8] = '.';
+
         for (int j = 0; j < 12; j++) {
             if ((bitboards[j]&(1ULL<<i)) != 0) {
                 char char_piece = pieceEnumToChar(static_cast<PieceType>(j));
@@ -58,7 +59,7 @@ char Board::pieceEnumToChar(Board::PieceType piece_type) {
     static const std::unordered_map<PieceType, char> piece_to_char_map = {
             {P, 'P'}, {R, 'R'}, {N, 'N'}, {B, 'B'}, {Q, 'Q'}, {K, 'K'},
             {p, 'p'}, {r, 'r'}, {n, 'n'}, {b, 'b'}, {q, 'q'}, {k, 'k'},
-            {NONE, '.'} // or any other character to represent NONE
+            {NONE, '.'}
     };
 
     auto it = piece_to_char_map.find(piece_type);

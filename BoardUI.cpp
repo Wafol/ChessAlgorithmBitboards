@@ -1,5 +1,6 @@
 #include <iostream>
 #include "BoardUI.h"
+#include "Board.h"
 
 void BoardUI::drawBoard(char (&board)[8][8]) {
     std::cout << "    A B C D E F G H" << std::endl << std::endl;
@@ -20,3 +21,17 @@ void BoardUI::drawBoard(char (&board)[8][8]) {
         std::cout << std::endl;
     }
 }
+
+void BoardUI::drawBitboards(uint64_t (&bitboards)[12]) {
+    char board[8][8];
+    Board::bitboardsToArray(board, bitboards);
+    drawBoard(board);
+}
+
+void BoardUI::printMoves(std::vector<OneMove> moves) {
+    for (OneMove move : moves) {
+        std::cout << static_cast<int>(move.i1) << " " << static_cast<int>(move.j1) << " "
+        << static_cast<int>(move.i2) << " " << static_cast<int>(move.j2) << std::endl;
+    }
+}
+

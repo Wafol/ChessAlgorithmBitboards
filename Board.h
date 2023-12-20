@@ -16,7 +16,7 @@ public:
 
     Board();
 
-    void bitboardsToArray(char (&dest_board)[8][8]);
+    static void bitboardsToArray(char (&dest_board)[8][8], uint64_t (&bitboards)[12]);
 
 private:
     void arrayToBitboards(char (&src_board)[8][8]);
