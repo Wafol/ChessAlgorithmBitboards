@@ -12,14 +12,13 @@ int main() {
     //    std::cout << std::bitset<64>(board.bitboards[i]) << std::endl;
     //}
 
-    BoardUI::drawBitboards(board.bitboards);
+    BoardUI::drawBitboards(board.bitboards, true);
 
     std::cout << std::endl << std::endl;
 
     MovesGeneration moves_gener;
     std::vector<OneMove> moves = moves_gener.generatePieceMoves(board.bitboards, Board::P);
 
-    std::cout << std::endl << std::endl;
     BoardUI::printMoves(moves);
 
 
