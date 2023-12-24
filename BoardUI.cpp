@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 #include "BoardUI.h"
 #include "Board.h"
 
@@ -40,4 +41,12 @@ void BoardUI::printMoves(std::vector<OneMove> moves) {
         std::cout << static_cast<int>(move.i1) << " " << static_cast<int>(move.j1) << "  "
         << static_cast<int>(move.i2) << " " << static_cast<int>(move.j2) << "  Promotion: " << move.promotion << std::endl;
     }
+}
+
+void BoardUI::drawBitboard(uint64_t bitboard) {
+    uint64_t bitboards[12];
+    memset(bitboards, 0, sizeof(bitboards));
+    bitboards[0] = bitboard;
+
+    drawBitboards(bitboards, true);
 }

@@ -10,6 +10,7 @@
 class MovesGeneration {
 public:
     std::vector<OneMove> generatePieceMoves(uint64_t (&bitboards)[12], Board::PieceType p_type);
+    std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12]);
 
 private:
     uint64_t rank_masks[8] = { 0xFF00000000000000ULL, 0xFF000000000000ULL, 0xFF0000000000ULL, 0xFF00000000ULL, 0xFF000000ULL, 0xFF0000ULL, 0xFF00ULL, 0xFFULL };
@@ -23,12 +24,21 @@ private:
     uint64_t black;
     uint64_t white;
     uint64_t empty;
+    uint64_t occupied;
     ////////////////////////////
 
     std::vector<OneMove> generateWPMoves(uint64_t (&bitboards)[12]);
     //this function takes bitboard with all possible positions where piece could move and transfers it to vector of OneMoves
     //int i1_plus, int j1_plus are numbers that are used to get starting position from the end position of one piece possible move
-    std::vector<OneMove> getMovesFromPossibilities(uint64_t possibilities, int i1_plus, int j1_plus, std::vector<Board::PieceType> possible_promotions = {});
+    std::vector<OneMove> getMovesFromPossibilitiesBitboard(uint64_t possibilities, int i1_plus, int j1_plus, const std::vector<Board::PieceType>& possible_promotions = {});
+
+    std::vector<OneMove> generateWRMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWBMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWQMoves(uint64_t bitboards[12]);
+    uint64_t HAndVMoves(int piece_shift);
+    uint64_t DAndAntiDMoves(int piece_shift);
+
+    uint64_t reverseBits(uint64_t x);
 };
 
 
