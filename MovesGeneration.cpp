@@ -103,13 +103,17 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
     std::vector<OneMove> white_pawn_moves;// = generateWPMoves(bitboards);
     std::vector<OneMove> white_rook_moves;// = generateWRMoves(bitboards);
     std::vector<OneMove> white_bishop_moves;// = generateWBMoves(bitboards);
-    std::vector<OneMove> white_queen_moves = generateWQMoves(bitboards);
+    std::vector<OneMove> white_queen_moves;// = generateWQMoves(bitboards);
+    std::vector<OneMove> white_knight_moves;// = generateWNMoves(bitboards);
+    std::vector<OneMove> white_king_moves = generateWKMoves(bitboards);
 
     std::vector<OneMove> white_moves;
     white_moves.insert(white_moves.end(), white_pawn_moves.begin(), white_pawn_moves.end());
     white_moves.insert(white_moves.end(), white_rook_moves.begin(), white_rook_moves.end());
     white_moves.insert(white_moves.end(), white_bishop_moves.begin(), white_bishop_moves.end());
     white_moves.insert(white_moves.end(), white_queen_moves.begin(), white_queen_moves.end());
+    white_moves.insert(white_moves.end(), white_knight_moves.begin(), white_knight_moves.end());
+    white_moves.insert(white_moves.end(), white_king_moves.begin(), white_king_moves.end());
 
     return white_moves;
 }
@@ -170,7 +174,7 @@ std::vector<OneMove> MovesGeneration::generateWBMoves(uint64_t bitboards[12]) {
     return possible_moves;
 }
 
-std::vector<OneMove> MovesGeneration::generateWQMoves(uint64_t *bitboards) {
+std::vector<OneMove> MovesGeneration::generateWQMoves(uint64_t bitboards[12]) {
     std::vector<OneMove> possible_moves;
 
     uint64_t i = bitboards[Board::Q] & ~(bitboards[Board::Q] - 1);
@@ -179,7 +183,6 @@ std::vector<OneMove> MovesGeneration::generateWQMoves(uint64_t *bitboards) {
     while(i != 0) {
         int piece_shift = __builtin_ctzll(i);
         possibility = (HAndVMoves(piece_shift)|DAndAntiDMoves(piece_shift)) & ~white & ~bitboards[Board::k];
-        BoardUI::drawBitboard(possibility);
 
         uint64_t j = possibility & ~(possibility - 1);
 
@@ -198,6 +201,87 @@ std::vector<OneMove> MovesGeneration::generateWQMoves(uint64_t *bitboards) {
     return possible_moves;
 }
 
+std::vector<OneMove> MovesGeneration::generateWNMoves(uint64_t bitboards[12]) {
+    std::vector<OneMove> possible_moves;
+
+    //this var stores moves when knight is on position i=5, j=5
+    const uint64_t knight_span = 5802888705324613632ULL;
+
+    const uint64_t file_gh = file_masks[6]|file_masks[7];
+    const uint64_t file_ab = file_masks[0]|file_masks[1];
+
+    uint64_t i = bitboards[Board::N] & ~(bitboards[Board::N] - 1);
+    uint64_t possibility;
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+
+        if (piece_shift > 45) {
+            possibility = knight_span << (piece_shift - 45);
+        } else {
+            possibility = knight_span >> (45 - piece_shift);
+        }
+
+        if (piece_shift%8 < 4) {
+            possibility &= ~file_gh & ~white & ~bitboards[Board::k];
+        } else {
+            possibility &= ~file_ab & ~white & ~bitboards[Board::k];
+        }
+
+        BoardUI::drawBitboard(possibility);
+
+        uint64_t j = possibility & ~(possibility - 1);
+        while (j != 0) {
+            int move_shift = __builtin_ctzll(j);
+            possible_moves.emplace_back(piece_shift/8, piece_shift%8, move_shift/8, move_shift%8);
+
+            possibility &= ~j;
+            j = possibility & ~(possibility - 1);
+        }
+
+        bitboards[Board::N] &= ~i;
+        i = bitboards[Board::N] & ~(bitboards[Board::N] - 1);
+    }
+
+    return possible_moves;
+}
+
+std::vector<OneMove> MovesGeneration::generateWKMoves(uint64_t bitboards[12]) {
+    std::vector<OneMove> possible_moves;
+
+    const uint64_t king_span = 16186183351374184448ULL;
+
+    const uint64_t file_gh = file_masks[6]|file_masks[7];
+    const uint64_t file_ab = file_masks[0]|file_masks[1];
+
+    int piece_shift = __builtin_ctzll(bitboards[Board::K]);
+    uint64_t possibility;
+
+    if (piece_shift > 54) {
+        possibility = king_span << (piece_shift - 54);
+    } else {
+        possibility = king_span >> (54 - piece_shift);
+    }
+
+    if (piece_shift%8 < 4) {
+        possibility &= ~file_gh & ~white & ~bitboards[Board::k];
+    } else {
+        possibility &= ~file_ab & ~white & ~bitboards[Board::k];
+    }
+
+    BoardUI::drawBitboard(possibility);
+
+    uint64_t j = possibility & ~(possibility - 1);
+    while (j != 0) {
+        int move_shift = __builtin_ctzll(j);
+        possible_moves.emplace_back(piece_shift/8, piece_shift%8, move_shift/8, move_shift%8);
+
+        possibility &= ~j;
+        j = possibility & ~(possibility - 1);
+    }
+
+    return possible_moves;
+}
 
 uint64_t MovesGeneration::DAndAntiDMoves(int piece_shift) {
     uint64_t piece_bitboard = 1ULL<<piece_shift;
@@ -233,6 +317,9 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
+
 
 
 

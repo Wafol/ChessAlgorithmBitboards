@@ -28,17 +28,19 @@ private:
     ////////////////////////////
 
     std::vector<OneMove> generateWPMoves(uint64_t (&bitboards)[12]);
+    std::vector<OneMove> generateWRMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWBMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWQMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWNMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWKMoves(uint64_t bitboards[12]);
+
     //this function takes bitboard with all possible positions where piece could move and transfers it to vector of OneMoves
     //int i1_plus, int j1_plus are numbers that are used to get starting position from the end position of one piece possible move
     std::vector<OneMove> getMovesFromPossibilitiesBitboard(uint64_t possibilities, int i1_plus, int j1_plus, const std::vector<Board::PieceType>& possible_promotions = {});
 
-    std::vector<OneMove> generateWRMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWBMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWQMoves(uint64_t bitboards[12]);
     uint64_t HAndVMoves(int piece_shift);
     uint64_t DAndAntiDMoves(int piece_shift);
-
-    uint64_t reverseBits(uint64_t x);
+    static uint64_t reverseBits(uint64_t x);
 };
 
 
