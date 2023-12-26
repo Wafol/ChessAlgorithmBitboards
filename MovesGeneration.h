@@ -9,8 +9,8 @@
 
 class MovesGeneration {
 public:
-    std::vector<OneMove> generatePieceMoves(uint64_t (&bitboards)[12], Board::PieceType p_type);
     std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12]);
+    std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12]);
 
 private:
     uint64_t rank_masks[8] = { 0xFF00000000000000ULL, 0xFF000000000000ULL, 0xFF0000000000ULL, 0xFF00000000ULL, 0xFF000000ULL, 0xFF0000ULL, 0xFF00ULL, 0xFFULL };
@@ -21,18 +21,25 @@ private:
     uint64_t anti_diag_masks[15] = { 0x1ULL, 0x102ULL, 0x10204ULL, 0x1020408ULL, 0x102040810ULL, 0x10204081020ULL, 0x1020408102040ULL, 0x102040810204080ULL, 0x204081020408000ULL, 0x408102040800000ULL, 0x810204080000000ULL, 0x1020408000000000ULL, 0x2040800000000000ULL, 0x4080000000000000ULL, 0x8000000000000000ULL };
 
     //////helper bitboards//////
-    uint64_t black;
-    uint64_t white;
+    uint64_t my_pieces;
+    uint64_t enemy_pieces;
+    uint64_t enemy_king;
     uint64_t empty;
     uint64_t occupied;
+
+    //uint64_t black;
+    //uint64_t white;
     ////////////////////////////
 
-    std::vector<OneMove> generateWPMoves(uint64_t (&bitboards)[12]);
-    std::vector<OneMove> generateWRMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWBMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWQMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWNMoves(uint64_t bitboards[12]);
-    std::vector<OneMove> generateWKMoves(uint64_t bitboards[12]);
+    std::vector<OneMove> generateWhitePawnMoves(uint64_t wpawn_bitboard);
+    std::vector<OneMove> generateBlackPawnMoves(uint64_t bpawn_bitboard);
+    std::vector<OneMove> generateRookMoves(uint64_t rook_bitboard);
+    std::vector<OneMove> generateBishopMoves(uint64_t bishop_bitboard);
+    std::vector<OneMove> generateQueenMoves(uint64_t queen_bitboard);
+    std::vector<OneMove> generateKnightMoves(uint64_t knight_bitboards);
+    std::vector<OneMove> generateKingMoves(uint64_t king_bitboard);
+
+    uint64_t unsafeForBlack(uint64_t bitboards[12]);
 
     //this function takes bitboard with all possible positions where piece could move and transfers it to vector of OneMoves
     //int i1_plus, int j1_plus are numbers that are used to get starting position from the end position of one piece possible move

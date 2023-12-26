@@ -18,7 +18,9 @@ int main() {
 
     MovesGeneration moves_gener;
     //std::vector<OneMove> moves = moves_gener.generatePieceMoves(board.bitboards, Board::P);
-    std::vector<OneMove> moves = moves_gener.generateWhiteMoves(board.bitboards);
+    std::vector<OneMove> moves = moves_gener.generateBlackMoves(board.bitboards);
+
+
 
     BoardUI::printMoves(moves);
 
