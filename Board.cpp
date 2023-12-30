@@ -6,10 +6,10 @@ Board::Board() {
     memset(bitboards, 0, sizeof(bitboards));
 
     char board[8][8] = {
-            {' ', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
-            {'p', 'p', 'p', 'p', ' ', 'p', 'p', 'p'},
-            {' ', ' ', ' ', ' ', 'p', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', 'R', ' ', ' '},
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
@@ -18,7 +18,54 @@ Board::Board() {
     arrayToBitboards(board);
 }
 
+std::string Board::getFENBoard() {
+    char board[8][8];
+    bitboardsToArray(board, bitboards);
+
+    std::string fen;
+
+    int space = 0;
+
+    for (int i = 0; i < 8; i++) {
+        for (int j = 0; j < 8; j++) {
+            if (board[i][j] == ' ' || board[i][j] == '.') {
+                space++;
+            } else {
+                if (space > 0) {
+                    fen += std::to_string(space);
+                    space = 0;
+                }
+
+                fen += board[i][j];
+            }
+        }
+
+        if (space > 0) {
+            fen += std::to_string(space);
+            space = 0;
+        }
+
+        if (i != 7)
+            fen += "/";
+    }
+
+    return fen;
+}
+
+void Board::movePiece(OneMove move) {
+    char board[8][8];
+    bitboardsToArray(board, bitboards);
+
+    char mem = board[move.i1][move.j1];
+    board[move.i1][move.j1] = ' ';
+    board[move.i2][move.j2] = mem;
+
+    arrayToBitboards(board);
+}
+
 void Board::arrayToBitboards(char (&src_board)[8][8]) {
+    memset(bitboards, 0, sizeof(bitboards));
+
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
             uint64_t bin_piece_pos = 1ULL<<(j + i*8);
@@ -45,7 +92,7 @@ void Board::bitboardsToArray(char (&dest_board)[8][8], uint64_t (&bitboards)[12]
 }
 
 
-Board::PieceType Board::charToPieceEnum(char char_piece){
+PieceType Board::charToPieceEnum(char char_piece){
     static const std::unordered_map<char, PieceType> char_to_piece_map = {
             {'P', P}, {'R', R}, {'N', N}, {'B', B}, {'Q', Q}, {'K', K},
             {'p', p}, {'r', r}, {'n', n}, {'b', b}, {'q', q}, {'k', k}
@@ -55,7 +102,7 @@ Board::PieceType Board::charToPieceEnum(char char_piece){
     return (it != char_to_piece_map.end()) ? it->second : NONE;
 }
 
-char Board::pieceEnumToChar(Board::PieceType piece_type) {
+char Board::pieceEnumToChar(PieceType piece_type) {
     static const std::unordered_map<PieceType, char> piece_to_char_map = {
             {P, 'P'}, {R, 'R'}, {N, 'N'}, {B, 'B'}, {Q, 'Q'}, {K, 'K'},
             {p, 'p'}, {r, 'r'}, {n, 'n'}, {b, 'b'}, {q, 'q'}, {k, 'k'},
@@ -65,3 +112,6 @@ char Board::pieceEnumToChar(Board::PieceType piece_type) {
     auto it = piece_to_char_map.find(piece_type);
     return (it != piece_to_char_map.end()) ? it->second : '.';
 }
+
+
+

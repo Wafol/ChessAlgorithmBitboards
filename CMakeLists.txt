@@ -9,4 +9,6 @@ add_executable(ChessAlgorithmBitboards main.cpp
         BoardUI.cpp
         MovesGeneration.cpp
         OneMove.h
-        OneMove.cpp)
+        OneMove.cpp
+        PieceType.h
+)

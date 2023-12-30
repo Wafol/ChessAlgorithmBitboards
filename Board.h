@@ -3,20 +3,21 @@
 
 
 #include <cstdint>
+#include <string>
+#include "OneMove.h"
+#include "PieceType.h"
 
 class Board {
 public:
-    //UPPERCASE=WHITE, lowercase=black
-    typedef enum PieceType {
-        P=0, R=1, N=2, B=3, Q=4, K=5, p=6, r=7, n=8, b=9, q=10, k=11, NONE
-    } PieceType;
-
     //read left-to-right and top-to-bottom
     uint64_t bitboards[12];
+    bool castle_wk, castle_wq, castle_bk, castle_bq = true;
 
     Board();
-
     static void bitboardsToArray(char (&dest_board)[8][8], uint64_t (&bitboards)[12]);
+    std::string getFENBoard();
+
+    void movePiece(OneMove move);
 
 private:
     void arrayToBitboards(char (&src_board)[8][8]);

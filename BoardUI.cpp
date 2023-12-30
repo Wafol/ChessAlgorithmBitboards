@@ -1,7 +1,47 @@
 #include <iostream>
 #include <cstring>
+#include <algorithm>
+#include <fstream>
 #include "BoardUI.h"
 #include "Board.h"
+
+bool BoardUI::handlePlayerMove(std::string move_input, Board &board) {
+    std::transform(move_input.begin(), move_input.end(), move_input.begin(), ::tolower);
+    std::vector<char> file_names = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
+
+    auto file1_it = std::find(file_names.begin(), file_names.end(), move_input.at(0));
+    auto file2_it = std::find(file_names.begin(), file_names.end(), move_input.at(2));
+
+    if (move_input.size() != 4
+        || file1_it == file_names.end()
+        || (move_input.at(1) - '0') < 1 || (move_input.at(1) - '0') > 8
+        || file2_it == file_names.end()
+        || (move_input.at(3) - '0') < 1 || (move_input.at(3) - '0') > 8)
+        return false;
+
+    OneMove player_move;
+    player_move.i1 = 8 - (move_input.at(1) - '0');
+    player_move.j1 = std::distance(file_names.begin(), file1_it);;
+    player_move.i2 = 8 - (move_input.at(3) - '0');
+    player_move.j2 = std::distance(file_names.begin(), file2_it);;
+
+    board.movePiece(player_move);
+
+    return true;
+}
+
+void BoardUI::writeInfoToCommunicationFile(Board &board, std::vector<OneMove> &possible_moves) {
+    std::ofstream file;
+    file.open(COMMUNICATION_FILE_PATH);
+
+    file << board.getFENBoard() + "\n";
+
+    for (OneMove move : possible_moves) {
+        file << move.toString() << "\n";
+    }
+
+    file.close();
+}
 
 void BoardUI::drawBoard(char (&board)[8][8], bool show_indexes) {
     if (show_indexes)
@@ -50,3 +90,6 @@ void BoardUI::drawBitboard(uint64_t bitboard) {
 
     drawBitboards(bitboards, true);
 }
+
+
+

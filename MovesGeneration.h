@@ -9,6 +9,7 @@
 
 class MovesGeneration {
 public:
+    std::vector<OneMove> generatePossibleMoves(uint64_t (&bitboards)[12]);
     std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12]);
     std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12]);
 
@@ -43,7 +44,7 @@ private:
 
     //this function takes bitboard with all possible positions where piece could move and transfers it to vector of OneMoves
     //int i1_plus, int j1_plus are numbers that are used to get starting position from the end position of one piece possible move
-    std::vector<OneMove> getMovesFromPossibilitiesBitboard(uint64_t possibilities, int i1_plus, int j1_plus, const std::vector<Board::PieceType>& possible_promotions = {});
+    std::vector<OneMove> getMovesFromPossibilitiesBitboard(uint64_t possibilities, int i1_plus, int j1_plus, const std::vector<PieceType>& possible_promotions = {});
 
     uint64_t HAndVMoves(int piece_shift);
     uint64_t DAndAntiDMoves(int piece_shift);

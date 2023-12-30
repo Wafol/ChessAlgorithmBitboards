@@ -5,43 +5,29 @@
 #include <immintrin.h>
 #include "BoardUI.h"
 
-std::vector<OneMove> MovesGeneration::getMovesFromPossibilitiesBitboard(uint64_t moves_bitboard, int i1_plus, int j1_plus, const std::vector<Board::PieceType>& possible_promotions) {
-    std::vector<OneMove> possible_moves;
+std::vector<OneMove> MovesGeneration::generatePossibleMoves(uint64_t (&bitboards)[12]) {
+    std::vector<OneMove> white_moves = generateWhiteMoves(bitboards);
+    std::vector<OneMove> black_moves = generateBlackMoves(bitboards);
 
-    uint64_t possibility = moves_bitboard & (~(moves_bitboard - 1));
-    while (possibility != 0) {
-        int indx = __builtin_ctzll(possibility);
-
-        if (possible_promotions.empty()) {
-            OneMove new_move(indx / 8 + i1_plus, indx % 8 + j1_plus, indx / 8, indx % 8);
-            possible_moves.push_back(new_move);
-        }
-
-        for (Board::PieceType promotion : possible_promotions) {
-            OneMove new_move(indx / 8 + i1_plus, indx % 8 + j1_plus, indx / 8, indx % 8, promotion);
-            possible_moves.push_back(new_move);
-        }
-
-        moves_bitboard &= ~possibility;
-        possibility = moves_bitboard & (~(moves_bitboard - 1));
-    }
-
-    return possible_moves;
+    std::vector<OneMove> all_moves;
+    all_moves.insert(all_moves.end(), white_moves.begin(), white_moves.end());
+    all_moves.insert(all_moves.end(), black_moves.begin(), black_moves.end());
+    return all_moves;
 }
 
 std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[12]) {
-    my_pieces = (bitboards[Board::P]|bitboards[Board::R]|bitboards[Board::N]|bitboards[Board::B]|bitboards[Board::Q]|bitboards[Board::K]);
-    enemy_pieces = (bitboards[Board::p]|bitboards[Board::r]|bitboards[Board::n]|bitboards[Board::b]|bitboards[Board::q]|bitboards[Board::k]);
-    enemy_king = bitboards[Board::k];
+    my_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
+    enemy_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
+    enemy_king = bitboards[k];
     empty = ~(my_pieces|enemy_pieces);
     occupied = ~empty;
 
-    std::vector<OneMove> white_pawn_moves = generateWhitePawnMoves(bitboards[Board::P]);
-    std::vector<OneMove> white_rook_moves = generateRookMoves(bitboards[Board::R]);
-    std::vector<OneMove> white_bishop_moves = generateBishopMoves(bitboards[Board::B]);
-    std::vector<OneMove> white_queen_moves = generateQueenMoves(bitboards[Board::Q]);
-    std::vector<OneMove> white_knight_moves = generateKnightMoves(bitboards[Board::N]);
-    std::vector<OneMove> white_king_moves = generateKingMoves(bitboards[Board::K]);
+    std::vector<OneMove> white_pawn_moves = generateWhitePawnMoves(bitboards[P]);
+    std::vector<OneMove> white_rook_moves = generateRookMoves(bitboards[R]);
+    std::vector<OneMove> white_bishop_moves = generateBishopMoves(bitboards[B]);
+    std::vector<OneMove> white_queen_moves = generateQueenMoves(bitboards[Q]);
+    std::vector<OneMove> white_knight_moves = generateKnightMoves(bitboards[N]);
+    std::vector<OneMove> white_king_moves = generateKingMoves(bitboards[K]);
 
     std::vector<OneMove> white_moves;
     white_moves.insert(white_moves.end(), white_pawn_moves.begin(), white_pawn_moves.end());
@@ -55,18 +41,18 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
 }
 
 std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[12]) {
-    my_pieces = (bitboards[Board::p]|bitboards[Board::r]|bitboards[Board::n]|bitboards[Board::b]|bitboards[Board::q]|bitboards[Board::k]);
-    enemy_pieces = (bitboards[Board::P]|bitboards[Board::R]|bitboards[Board::N]|bitboards[Board::B]|bitboards[Board::Q]|bitboards[Board::K]);
-    enemy_king = bitboards[Board::K];
+    my_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
+    enemy_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
+    enemy_king = bitboards[K];
     empty = ~(my_pieces|enemy_pieces);
     occupied = ~empty;
 
-    std::vector<OneMove> black_pawn_moves = generateBlackPawnMoves(bitboards[Board::p]);
-    std::vector<OneMove> black_rook_moves;// = generateRookMoves(bitboards[Board::r]);
-    std::vector<OneMove> black_bishop_moves;// = generateBishopMoves(bitboards[Board::b]);
-    std::vector<OneMove> black_queen_moves;// = generateQueenMoves(bitboards[Board::q]);
-    std::vector<OneMove> black_knight_moves;// = generateKnightMoves(bitboards[Board::n]);
-    std::vector<OneMove> black_king_moves;// = generateKingMoves(bitboards[Board::k]);
+    std::vector<OneMove> black_pawn_moves = generateBlackPawnMoves(bitboards[p]);
+    std::vector<OneMove> black_rook_moves = generateRookMoves(bitboards[r]);
+    std::vector<OneMove> black_bishop_moves = generateBishopMoves(bitboards[b]);
+    std::vector<OneMove> black_queen_moves = generateQueenMoves(bitboards[q]);
+    std::vector<OneMove> black_knight_moves = generateKnightMoves(bitboards[n]);
+    std::vector<OneMove> black_king_moves = generateKingMoves(bitboards[k]);
 
     std::vector<OneMove> black_moves;
     black_moves.insert(black_moves.end(), black_pawn_moves.begin(), black_pawn_moves.end());
@@ -104,7 +90,7 @@ std::vector<OneMove> MovesGeneration::generateWhitePawnMoves(uint64_t wpawn_bitb
     possible_moves.insert(possible_moves.begin(), two_steps_forward.begin(), two_steps_forward.end());
 
     ///promotions///
-    std::vector<Board::PieceType> poss_promotions = {Board::Q, Board::R, Board::B, Board::N};
+    std::vector<PieceType> poss_promotions = {Q, R, B, N};
     ///promotions - one step forward///
     moves_bitboard = (wpawn_bitboard >> 8) & empty & rank_masks[7];
     std::vector<OneMove> one_forward_promotions = getMovesFromPossibilitiesBitboard(moves_bitboard, 1, 0, poss_promotions);
@@ -146,7 +132,7 @@ std::vector<OneMove> MovesGeneration::generateBlackPawnMoves(uint64_t bpawn_bitb
     possible_moves.insert(possible_moves.begin(), two_steps_forward.begin(), two_steps_forward.end());
 
     ///promotions///
-    std::vector<Board::PieceType> poss_promotions = {Board::q, Board::r, Board::b, Board::n};
+    std::vector<PieceType> poss_promotions = {q, r, b, n};
     ///promotions - one step forward///
     moves_bitboard = (bpawn_bitboard << 8) & empty & rank_masks[0];
     std::vector<OneMove> one_forward_promotions = getMovesFromPossibilitiesBitboard(moves_bitboard, -1, 0, poss_promotions);
@@ -159,6 +145,30 @@ std::vector<OneMove> MovesGeneration::generateBlackPawnMoves(uint64_t bpawn_bitb
     moves_bitboard = (bpawn_bitboard << 9) & enemy_pieces & (~enemy_king) & (~file_masks[0]) & rank_masks[0];
     std::vector<OneMove> diag_left_promotions = getMovesFromPossibilitiesBitboard(moves_bitboard, -1, -1, poss_promotions);
     possible_moves.insert(possible_moves.begin(), diag_left_promotions.begin(), diag_left_promotions.end());
+
+    return possible_moves;
+}
+
+std::vector<OneMove> MovesGeneration::getMovesFromPossibilitiesBitboard(uint64_t moves_bitboard, int i1_plus, int j1_plus, const std::vector<PieceType>& possible_promotions) {
+    std::vector<OneMove> possible_moves;
+
+    uint64_t possibility = moves_bitboard & (~(moves_bitboard - 1));
+    while (possibility != 0) {
+        int indx = __builtin_ctzll(possibility);
+
+        if (possible_promotions.empty()) {
+            OneMove new_move(indx / 8 + i1_plus, indx % 8 + j1_plus, indx / 8, indx % 8);
+            possible_moves.push_back(new_move);
+        }
+
+        for (PieceType promotion : possible_promotions) {
+            OneMove new_move(indx / 8 + i1_plus, indx % 8 + j1_plus, indx / 8, indx % 8, promotion);
+            possible_moves.push_back(new_move);
+        }
+
+        moves_bitboard &= ~possibility;
+        possibility = moves_bitboard & (~(moves_bitboard - 1));
+    }
 
     return possible_moves;
 }
@@ -432,6 +442,8 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
 
 
 
