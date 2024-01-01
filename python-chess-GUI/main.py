@@ -13,7 +13,7 @@ class App:
         self._piece_textures = None
         self._running = True
         self._screen = None
-        self._size = self._width, self._height = 400, 400
+        self._size = self._width, self._height = 536, 536
 
     def on_init(self):
         pygame.init()
@@ -30,16 +30,18 @@ class App:
 
         if event.type == pygame.MOUSEBUTTONUP:
             pos = pygame.mouse.get_pos()
-            coords = (pos[1]//(self._width//8), pos[0]//(self._width//8))
-            self._chess_board.select_square(coords)
+            chess_coords = (pos[1]//(self._width//8), pos[0]//(self._width//8))
 
-            # rects = (coords,)
-            # self._chess_board.update_highlighted_rects(rects)
+            self._chess_board.select_square(chess_coords)
 
     def on_loop(self):
         self._screen.fill((255, 255, 255))
 
-        self._chess_board.get_data_from_cpp()
+        #### COMMUNICATION ####
+        fen = self._chess_board.get_data_from_cpp()
+        self._chess_board.update_pieces_arr_by_fen(fen)
+        #######################
+
         self._chess_board.draw_board()
 
     def on_render(self):
@@ -61,6 +63,6 @@ class App:
         self.on_cleanup()
 
 
-if __name__ == "__main__" :
+if __name__ == "__main__":
     theApp = App()
     theApp.on_execute()

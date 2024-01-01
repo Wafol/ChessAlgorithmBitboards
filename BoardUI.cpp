@@ -31,8 +31,18 @@ bool BoardUI::handlePlayerMove(std::string move_input, Board &board) {
 }
 
 void BoardUI::writeInfoToCommunicationFile(Board &board, std::vector<OneMove> &possible_moves) {
+    std::ifstream in_file;
+    in_file.open(CPP_TO_PY_FILE);
+
+    std::string content;
+    in_file >> content;
+    in_file.close();
+
+    if (content == board.getFENBoard())
+        return;
+    /////////////////////////
     std::ofstream file;
-    file.open(COMMUNICATION_FILE_PATH);
+    file.open(CPP_TO_PY_FILE);
 
     file << board.getFENBoard() + "\n";
 
@@ -41,6 +51,27 @@ void BoardUI::writeInfoToCommunicationFile(Board &board, std::vector<OneMove> &p
     }
 
     file.close();
+}
+
+bool BoardUI::checkForMoveFromPython(Board &board) {
+    std::ifstream file;
+    file.open(PY_TO_CPP_FILE);
+
+    std::string content;
+    file >> content;
+
+    if (!content.empty()) {
+        OneMove move(content[0] - '0', content[1] - '0', content[2] - '0', content[3] - '0');
+
+        board.movePiece(move);
+        std::fstream file_delete(PY_TO_CPP_FILE, std::ios::out);
+        file.close();
+
+        return true;
+    }
+
+    file.close();
+    return false;
 }
 
 void BoardUI::drawBoard(char (&board)[8][8], bool show_indexes) {
@@ -90,6 +121,8 @@ void BoardUI::drawBitboard(uint64_t bitboard) {
 
     drawBitboards(bitboards, true);
 }
+
+
 
 
 

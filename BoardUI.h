@@ -10,6 +10,8 @@ public:
     //returns if it was successfull
     static bool handlePlayerMove(std::string move_input, Board &board);
     static void writeInfoToCommunicationFile(Board &, std::vector<OneMove> &possible_moves);
+    //returns true if the move was updated
+    static bool checkForMoveFromPython(Board &board);
 
     //if show_indexes=false, then it will draw normal chess description
     static void drawBoard(char (&board)[8][8], bool show_indexes = false);
@@ -19,8 +21,8 @@ public:
     static void printMoves(std::vector<OneMove> moves);
 
 private:
-    constexpr static char COMMUNICATION_FILE_PATH[] = R"(D:\Dokumenty\_skola\DlouhodobaMaturitniPrace\ChessBoardProgram\ChessAlgorithmBitboards\communication-files\cppTOpy_communication.txt)";
-
+    constexpr static char CPP_TO_PY_FILE[] = R"(D:\Dokumenty\_skola\DlouhodobaMaturitniPrace\ChessBoardProgram\ChessAlgorithmBitboards\communication-files\cppTOpy_communication.txt)";
+    constexpr static char PY_TO_CPP_FILE[] = R"(D:\Dokumenty\_skola\DlouhodobaMaturitniPrace\ChessBoardProgram\ChessAlgorithmBitboards\communication-files\pyTOcpp_communication.txt)";
 };
 
 

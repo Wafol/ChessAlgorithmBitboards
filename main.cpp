@@ -9,20 +9,28 @@
 int main() {
     Board board;
 
-    BoardUI::drawBitboards(board.bitboards, false);
+    //BoardUI::drawBitboards(board.bitboards, false);
 
     std::cout << std::endl << std::endl;
 
-    std::string fen = board.getFENBoard();
-    std::cout << fen;
+    //std::string fen = board.getFENBoard();
+    //std::cout << fen;
 
     MovesGeneration moves_gener;
     std::vector<OneMove> possible_moves = moves_gener.generatePossibleMoves(board.bitboards);
 
-    BoardUI::writeInfoToCommunicationFile(board, possible_moves);
+    //
 
     //std::vector<OneMove> moves = moves_gener.generatePieceMoves(board.bitboards);
     //std::vector<OneMove> moves = moves_gener.generateBlackMoves(board.bitboards);
+
+    while (true) {
+        if (BoardUI::checkForMoveFromPython(board)) {
+            possible_moves = moves_gener.generatePossibleMoves(board.bitboards);
+        }
+
+        BoardUI::writeInfoToCommunicationFile(board, possible_moves);
+    }
 
     while (true) {
         std::string in;
