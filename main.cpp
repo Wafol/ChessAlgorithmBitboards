@@ -17,7 +17,7 @@ int main() {
     //std::cout << fen;
 
     MovesGeneration moves_gener;
-    std::vector<OneMove> possible_moves = moves_gener.generatePossibleMoves(board.bitboards);
+    std::vector<OneMove> possible_moves = moves_gener.generatePossibleMoves(board);
 
     //
 
@@ -26,7 +26,8 @@ int main() {
 
     while (true) {
         if (BoardUI::checkForMoveFromPython(board)) {
-            possible_moves = moves_gener.generatePossibleMoves(board.bitboards);
+            possible_moves = moves_gener.generatePossibleMoves(board);
+            BoardUI::drawBitboard(moves_gener.unsafeForBlack(board.bitboards));
         }
 
         BoardUI::writeInfoToCommunicationFile(board, possible_moves);
@@ -40,7 +41,7 @@ int main() {
 
         BoardUI::drawBitboards(board.bitboards, false);
 
-        possible_moves = moves_gener.generatePossibleMoves(board.bitboards);
+        possible_moves = moves_gener.generatePossibleMoves(board);
         BoardUI::writeInfoToCommunicationFile(board, possible_moves);
     }
 

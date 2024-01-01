@@ -4,7 +4,7 @@
 
 #include <cstdint>
 #include <string>
-#include "PieceType.h"
+#include "ChessEnums.h"
 
 class OneMove {
 public:

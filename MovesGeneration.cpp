@@ -1,13 +1,8 @@
 #include "MovesGeneration.h"
-#include <iostream>
-#include <bitset>
-#include <cstring>
-#include <immintrin.h>
-#include "BoardUI.h"
 
-std::vector<OneMove> MovesGeneration::generatePossibleMoves(uint64_t (&bitboards)[12]) {
-    std::vector<OneMove> white_moves = generateWhiteMoves(bitboards);
-    std::vector<OneMove> black_moves = generateBlackMoves(bitboards);
+std::vector<OneMove> MovesGeneration::generatePossibleMoves(Board &board) {
+    std::vector<OneMove> white_moves = generateWhiteMoves(board.bitboards, board.castling);
+    std::vector<OneMove> black_moves = generateBlackMoves(board.bitboards, board.castling);
 
     std::vector<OneMove> all_moves;
     all_moves.insert(all_moves.end(), white_moves.begin(), white_moves.end());
@@ -15,7 +10,7 @@ std::vector<OneMove> MovesGeneration::generatePossibleMoves(uint64_t (&bitboards
     return all_moves;
 }
 
-std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[12]) {
+std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
     my_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
     enemy_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
     enemy_king = bitboards[k];
@@ -40,7 +35,7 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
     return white_moves;
 }
 
-std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[12]) {
+std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
     my_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
     enemy_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
     enemy_king = bitboards[K];
@@ -257,12 +252,6 @@ std::vector<OneMove> MovesGeneration::generateQueenMoves(uint64_t queen_bitboard
 std::vector<OneMove> MovesGeneration::generateKnightMoves(uint64_t knight_bitboards) {
     std::vector<OneMove> possible_moves;
 
-    //this var stores moves when knight is on position i=5, j=5
-    const uint64_t knight_span = 5802888705324613632ULL;
-
-    const uint64_t file_gh = file_masks[6]|file_masks[7];
-    const uint64_t file_ab = file_masks[0]|file_masks[1];
-
     uint64_t i = knight_bitboards & ~(knight_bitboards - 1);
     uint64_t possibility;
 
@@ -300,11 +289,6 @@ std::vector<OneMove> MovesGeneration::generateKnightMoves(uint64_t knight_bitboa
 std::vector<OneMove> MovesGeneration::generateKingMoves(uint64_t king_bitboard) {
     std::vector<OneMove> possible_moves;
 
-    const uint64_t king_span = 16186183351374184448ULL;
-
-    const uint64_t file_gh = file_masks[6]|file_masks[7];
-    const uint64_t file_ab = file_masks[0]|file_masks[1];
-
     int piece_shift = __builtin_ctzll(king_bitboard);
     uint64_t possibility;
 
@@ -332,81 +316,172 @@ std::vector<OneMove> MovesGeneration::generateKingMoves(uint64_t king_bitboard) 
     return possible_moves;
 }
 
-/*uint64_t MovesGeneration::unsafeForBlack(uint64_t *bitboards) {
-    uint64_t unsafe = 0;
+std::vector<OneMove> MovesGeneration::generateCastlingWhite(uint64_t (&bitboards)[12], bool (&castling)[4]) {
+    return std::vector<OneMove>();
+}
+
+
+uint64_t MovesGeneration::unsafeForWhite(uint64_t (&bitboards)[12]) {
+    uint64_t unsafe;
 
     //pawn
-    unsafe=((WP>>>7)&~FILE_A);//pawn capture right
-    unsafe|=((WP>>>9)&~FILE_H);//pawn capture left
-    long possibility;
-    //knight
-    long i=WN&~(WN-1);
-    while(i != 0)
-    {
-        int iLocation=Long.numberOfTrailingZeros(i);
-        if (iLocation>18)
-        {
-            possibility=KNIGHT_SPAN<<(iLocation-18);
-        }
-        else {
-            possibility=KNIGHT_SPAN>>(18-iLocation);
-        }
-        if (iLocation%8<4)
-        {
-            possibility &=~FILE_GH;
-        }
-        else {
-            possibility &=~FILE_AB;
-        }
-        unsafe |= possibility;
-        WN&=~i;
-        i=WN&~(WN-1);
-    }
-    //bishop/queen
-    long QB=WQ|WB;
-    i=QB&~(QB-1);
-    while(i != 0)
-    {
-        int iLocation=Long.numberOfTrailingZeros(i);
-        possibility=DAndAntiDMoves(iLocation);
-        unsafe |= possibility;
-        QB&=~i;
-        i=QB&~(QB-1);
-    }
-    //rook/queen
-    long QR=WQ|WR;
-    i=QR&~(QR-1);
-    while(i != 0)
-    {
-        int iLocation=Long.numberOfTrailingZeros(i);
-        possibility=HAndVMoves(iLocation);
-        unsafe |= possibility;
-        QR&=~i;
-        i=QR&~(QR-1);
-    }
-    //king
-    int iLocation=Long.numberOfTrailingZeros(WK);
-    if (iLocation>9)
-    {
-        possibility=KING_SPAN<<(iLocation-9);
-    }
-    else {
-        possibility=KING_SPAN>>(9-iLocation);
-    }
-    if (iLocation%8<4)
-    {
-        possibility &=~FILE_GH;
-    }
-    else {
-        possibility &=~FILE_AB;
-    }
-    unsafe |= possibility;
-    System.out.println();
-    drawBitboard(unsafe);
-    return unsafe;
+    unsafe = ((bitboards[p]<<7) & ~file_masks[7]);
+    unsafe |= ((bitboards[p]<<9) & ~file_masks[0]);
 
-    return 0;
-}*/
+    //knight
+    uint64_t possibility;
+    uint64_t bn_bitboard = bitboards[n];
+    uint64_t i = bn_bitboard & ~(bn_bitboard - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+
+        if (piece_shift > 45) {
+            possibility = knight_span << (piece_shift - 45);
+        } else {
+            possibility = knight_span >> (45 - piece_shift);
+        }
+
+        if (piece_shift%8 < 4) {
+            possibility &= ~file_gh;
+        } else {
+            possibility &= ~file_ab;
+        }
+
+        unsafe |= possibility;
+
+        bn_bitboard &= ~i;
+        i = bn_bitboard & ~(bn_bitboard - 1);
+    }
+
+    //bishop/queen
+    uint64_t bishop_queen = bitboards[b]|bitboards[q];
+    i = bishop_queen & ~(bishop_queen - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+        possibility = DAndAntiDMoves(piece_shift);
+
+        unsafe |= possibility;
+
+        bishop_queen &= ~i;
+        i = bishop_queen & ~(bishop_queen - 1);
+    }
+
+    //rook/queen
+    uint64_t rook_queen = bitboards[r]|bitboards[q];
+    i = rook_queen & ~(rook_queen - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+        possibility = HAndVMoves(piece_shift);
+
+        unsafe |= possibility;
+
+        rook_queen &= ~i;
+        i = rook_queen & ~(rook_queen - 1);
+    }
+
+    //king
+    int piece_shift = __builtin_ctzll(bitboards[k]);
+
+    if (piece_shift > 54) {
+        possibility = king_span << (piece_shift - 54);
+    } else {
+        possibility = king_span >> (54 - piece_shift);
+    }
+
+    if (piece_shift%8 < 4) {
+        possibility &= ~file_gh;
+    } else {
+        possibility &= ~file_ab;
+    }
+
+    unsafe |= possibility;
+
+    return unsafe;
+}
+
+uint64_t MovesGeneration::unsafeForBlack(uint64_t (&bitboards)[12]) {
+    uint64_t unsafe;
+
+    //pawn
+    unsafe = ((bitboards[P]>>7) & ~file_masks[0]);
+    unsafe |= ((bitboards[P]>>9) & ~file_masks[7]);
+
+    //knight
+    uint64_t possibility;
+    uint64_t bn_bitboard = bitboards[N];
+    uint64_t i = bn_bitboard & ~(bn_bitboard - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+
+        if (piece_shift > 45) {
+            possibility = knight_span << (piece_shift - 45);
+        } else {
+            possibility = knight_span >> (45 - piece_shift);
+        }
+
+        if (piece_shift%8 < 4) {
+            possibility &= ~file_gh;
+        } else {
+            possibility &= ~file_ab;
+        }
+
+        unsafe |= possibility;
+
+        bn_bitboard &= ~i;
+        i = bn_bitboard & ~(bn_bitboard - 1);
+    }
+
+    //bishop/queen
+    uint64_t bishop_queen = bitboards[B]|bitboards[Q];
+    i = bishop_queen & ~(bishop_queen - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+        possibility = DAndAntiDMoves(piece_shift);
+
+        unsafe |= possibility;
+
+        bishop_queen &= ~i;
+        i = bishop_queen & ~(bishop_queen - 1);
+    }
+
+    //rook/queen
+    uint64_t rook_queen = bitboards[R]|bitboards[Q];
+    i = rook_queen & ~(rook_queen - 1);
+
+    while(i != 0) {
+        int piece_shift = __builtin_ctzll(i);
+        possibility = HAndVMoves(piece_shift);
+
+        unsafe |= possibility;
+
+        rook_queen &= ~i;
+        i = rook_queen & ~(rook_queen - 1);
+    }
+
+    //king
+    int piece_shift = __builtin_ctzll(bitboards[K]);
+
+    if (piece_shift > 54) {
+        possibility = king_span << (piece_shift - 54);
+    } else {
+        possibility = king_span >> (54 - piece_shift);
+    }
+
+    if (piece_shift%8 < 4) {
+        possibility &= ~file_gh;
+    } else {
+        possibility &= ~file_ab;
+    }
+
+    unsafe |= possibility;
+
+    return unsafe;
+}
 
 uint64_t MovesGeneration::DAndAntiDMoves(int piece_shift) {
     uint64_t piece_bitboard = 1ULL<<piece_shift;
@@ -442,6 +517,8 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
 
 
 

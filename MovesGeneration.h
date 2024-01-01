@@ -9,9 +9,9 @@
 
 class MovesGeneration {
 public:
-    std::vector<OneMove> generatePossibleMoves(uint64_t (&bitboards)[12]);
-    std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12]);
-    std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12]);
+    std::vector<OneMove> generatePossibleMoves(Board &board);
+    std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
 
 private:
     uint64_t rank_masks[8] = { 0xFF00000000000000ULL, 0xFF000000000000ULL, 0xFF0000000000ULL, 0xFF00000000ULL, 0xFF000000ULL, 0xFF0000ULL, 0xFF00ULL, 0xFFULL };
@@ -28,8 +28,12 @@ private:
     uint64_t empty;
     uint64_t occupied;
 
-    //uint64_t black;
-    //uint64_t white;
+    //this var stores moves when knight is on position i=5, j=5
+    const uint64_t knight_span = 5802888705324613632ULL;
+    const uint64_t king_span = 16186183351374184448ULL;
+
+    const uint64_t file_gh = file_masks[6]|file_masks[7];
+    const uint64_t file_ab = file_masks[0]|file_masks[1];
     ////////////////////////////
 
     std::vector<OneMove> generateWhitePawnMoves(uint64_t wpawn_bitboard);
@@ -39,8 +43,11 @@ private:
     std::vector<OneMove> generateQueenMoves(uint64_t queen_bitboard);
     std::vector<OneMove> generateKnightMoves(uint64_t knight_bitboards);
     std::vector<OneMove> generateKingMoves(uint64_t king_bitboard);
-
-    uint64_t unsafeForBlack(uint64_t bitboards[12]);
+    std::vector<OneMove> generateCastlingWhite(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generateCastlingBlack(uint64_t (&bitboards)[12], bool (&castling)[4]);
+public:
+    uint64_t unsafeForWhite(uint64_t (&bitboards)[12]);
+    uint64_t unsafeForBlack(uint64_t (&bitboards)[12]);
 
     //this function takes bitboard with all possible positions where piece could move and transfers it to vector of OneMoves
     //int i1_plus, int j1_plus are numbers that are used to get starting position from the end position of one piece possible move

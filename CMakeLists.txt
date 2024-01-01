@@ -10,5 +10,5 @@ add_executable(ChessAlgorithmBitboards main.cpp
         MovesGeneration.cpp
         OneMove.h
         OneMove.cpp
-        PieceType.h
+        ChessEnums.h
 )

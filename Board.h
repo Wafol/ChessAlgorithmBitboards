@@ -5,13 +5,14 @@
 #include <cstdint>
 #include <string>
 #include "OneMove.h"
-#include "PieceType.h"
+#include "ChessEnums.h"
 
 class Board {
 public:
-    //read left-to-right and top-to-bottom
+    // read left-to-right and top-to-bottom (index by enum PieceType)
     uint64_t bitboards[12];
-    bool castle_wk, castle_wq, castle_bk, castle_bq = true;
+    // contains if castling is possible (index by enum CastlingType)
+    bool castling[4];
 
     Board();
     static void bitboardsToArray(char (&dest_board)[8][8], uint64_t (&bitboards)[12]);

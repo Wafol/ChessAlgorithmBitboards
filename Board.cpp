@@ -4,6 +4,7 @@
 
 Board::Board() {
     memset(bitboards, 0, sizeof(bitboards));
+    memset(castling, 0, sizeof(castling));
 
     char board[8][8] = {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},

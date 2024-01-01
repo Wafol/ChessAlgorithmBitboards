@@ -154,7 +154,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "PieceType.h",
+			"path" : "ChessEnums.h",
 			"sourceGroupIndex" : 1
 		}
 	],
