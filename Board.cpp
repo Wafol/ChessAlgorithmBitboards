@@ -4,7 +4,7 @@
 
 Board::Board() {
     memset(bitboards, 0, sizeof(bitboards));
-    memset(castling, 0, sizeof(castling));
+    memset(castling, true, sizeof(castling));
 
     char board[8][8] = {
             {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
@@ -57,11 +57,79 @@ void Board::movePiece(OneMove move) {
     char board[8][8];
     bitboardsToArray(board, bitboards);
 
-    char mem = board[move.i1][move.j1];
-    board[move.i1][move.j1] = ' ';
-    board[move.i2][move.j2] = mem;
+    if (!handleCastling(board, move)) {
+        char mem = board[move.i1][move.j1];
+        board[move.i1][move.j1] = ' ';
+        board[move.i2][move.j2] = mem;
+    }
 
     arrayToBitboards(board);
+}
+
+bool Board::handleCastling(char (&board)[8][8], OneMove move) {
+    char piece_to_move = board[move.i1][move.j1];
+    updateCastlingBoolsAfterMove(piece_to_move, move);
+
+    if (piece_to_move != 'K' && piece_to_move != 'k')
+        return false;
+
+    bool castling_performed = false;
+
+    if (move.i1 == 7 && move.j1 == 4 && move.i2 == 7 && move.j2 == 6) {
+        board[7][7] = ' ';
+        board[7][5] = 'R';
+
+        castling_performed = true;
+    } else if (move.i1 == 7 && move.j1 == 4 && move.i2 == 7 && move.j2 == 2) {
+        board[7][0] = ' ';
+        board[7][3] = 'R';
+
+        castling_performed = true;
+    } else if (move.i1 == 0 && move.j1 == 4 && move.i2 == 0 && move.j2 == 6) {
+        board[0][7] = ' ';
+        board[0][5] = 'r';
+
+        castling_performed = true;
+    } else if (move.i1 == 0 && move.j1 == 4 && move.i2 == 0 && move.j2 == 2) {
+        board[0][0] = ' ';
+        board[0][3] = 'r';
+
+        castling_performed = true;
+    }
+
+    if (castling_performed) {
+        char mem = board[move.i1][move.j1];
+        board[move.i1][move.j1] = ' ';
+        board[move.i2][move.j2] = mem;
+    }
+
+    return castling_performed;
+}
+void Board::updateCastlingBoolsAfterMove(char moved_piece, OneMove move) {
+    switch (moved_piece) {
+        case 'K':
+            castling[CASTLE_WK] = false;
+            castling[CASTLE_WQ] = false;
+            break;
+        case 'k':
+            castling[CASTLE_BK] = false;
+            castling[CASTLE_BQ] = false;
+            break;
+        case 'R':
+            if (move.i1 == 7 && move.j1 == 7) {
+                castling[CASTLE_WK] = false;
+            } else if (move.i1 == 7 && move.j1 == 0) {
+                castling[CASTLE_WQ] = false;
+            }
+            break;
+        case 'r':
+            if (move.i1 == 0 && move.j1 == 7) {
+                castling[CASTLE_BK] = false;
+            } else if (move.i1 == 0 && move.j1 == 0) {
+                castling[CASTLE_BQ] = false;
+            }
+            break;
+    }
 }
 
 void Board::arrayToBitboards(char (&src_board)[8][8]) {
@@ -113,6 +181,10 @@ char Board::pieceEnumToChar(PieceType piece_type) {
     auto it = piece_to_char_map.find(piece_type);
     return (it != piece_to_char_map.end()) ? it->second : '.';
 }
+
+
+
+
 
 
 

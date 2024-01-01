@@ -34,6 +34,9 @@ private:
 
     const uint64_t file_gh = file_masks[6]|file_masks[7];
     const uint64_t file_ab = file_masks[0]|file_masks[1];
+
+    //index by enum CastlingType
+    const uint64_t castle_rooks[4] = {63, 56, 7, 0};
     ////////////////////////////
 
     std::vector<OneMove> generateWhitePawnMoves(uint64_t wpawn_bitboard);
@@ -43,8 +46,8 @@ private:
     std::vector<OneMove> generateQueenMoves(uint64_t queen_bitboard);
     std::vector<OneMove> generateKnightMoves(uint64_t knight_bitboards);
     std::vector<OneMove> generateKingMoves(uint64_t king_bitboard);
-    std::vector<OneMove> generateCastlingWhite(uint64_t (&bitboards)[12], bool (&castling)[4]);
-    std::vector<OneMove> generateCastlingBlack(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generateWhiteCastling(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generateBlackCastling(uint64_t (&bitboards)[12], bool (&castling)[4]);
 public:
     uint64_t unsafeForWhite(uint64_t (&bitboards)[12]);
     uint64_t unsafeForBlack(uint64_t (&bitboards)[12]);

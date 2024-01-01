@@ -23,6 +23,7 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
     std::vector<OneMove> white_queen_moves = generateQueenMoves(bitboards[Q]);
     std::vector<OneMove> white_knight_moves = generateKnightMoves(bitboards[N]);
     std::vector<OneMove> white_king_moves = generateKingMoves(bitboards[K]);
+    std::vector<OneMove> white_castling_moves = generateWhiteCastling(bitboards, castling);
 
     std::vector<OneMove> white_moves;
     white_moves.insert(white_moves.end(), white_pawn_moves.begin(), white_pawn_moves.end());
@@ -31,10 +32,10 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
     white_moves.insert(white_moves.end(), white_queen_moves.begin(), white_queen_moves.end());
     white_moves.insert(white_moves.end(), white_knight_moves.begin(), white_knight_moves.end());
     white_moves.insert(white_moves.end(), white_king_moves.begin(), white_king_moves.end());
+    white_moves.insert(white_moves.end(), white_castling_moves.begin(), white_castling_moves.end());
 
     return white_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
     my_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
     enemy_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
@@ -48,6 +49,7 @@ std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[1
     std::vector<OneMove> black_queen_moves = generateQueenMoves(bitboards[q]);
     std::vector<OneMove> black_knight_moves = generateKnightMoves(bitboards[n]);
     std::vector<OneMove> black_king_moves = generateKingMoves(bitboards[k]);
+    std::vector<OneMove> black_castling_moves = generateBlackCastling(bitboards, castling);
 
     std::vector<OneMove> black_moves;
     black_moves.insert(black_moves.end(), black_pawn_moves.begin(), black_pawn_moves.end());
@@ -56,6 +58,7 @@ std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[1
     black_moves.insert(black_moves.end(), black_queen_moves.begin(), black_queen_moves.end());
     black_moves.insert(black_moves.end(), black_knight_moves.begin(), black_knight_moves.end());
     black_moves.insert(black_moves.end(), black_king_moves.begin(), black_king_moves.end());
+    black_moves.insert(black_moves.end(), black_castling_moves.begin(), black_castling_moves.end());
 
     return black_moves;
 }
@@ -101,7 +104,6 @@ std::vector<OneMove> MovesGeneration::generateWhitePawnMoves(uint64_t wpawn_bitb
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateBlackPawnMoves(uint64_t bpawn_bitboard) {
     std::vector<OneMove> possible_moves;
 
@@ -143,7 +145,6 @@ std::vector<OneMove> MovesGeneration::generateBlackPawnMoves(uint64_t bpawn_bitb
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::getMovesFromPossibilitiesBitboard(uint64_t moves_bitboard, int i1_plus, int j1_plus, const std::vector<PieceType>& possible_promotions) {
     std::vector<OneMove> possible_moves;
 
@@ -167,7 +168,6 @@ std::vector<OneMove> MovesGeneration::getMovesFromPossibilitiesBitboard(uint64_t
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateRookMoves(uint64_t rook_bitboard) {
     std::vector<OneMove> possible_moves;
 
@@ -194,7 +194,6 @@ std::vector<OneMove> MovesGeneration::generateRookMoves(uint64_t rook_bitboard) 
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateBishopMoves(uint64_t bishop_bitboard) {
     std::vector<OneMove> possible_moves;
 
@@ -221,7 +220,6 @@ std::vector<OneMove> MovesGeneration::generateBishopMoves(uint64_t bishop_bitboa
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateQueenMoves(uint64_t queen_bitboard) {
     std::vector<OneMove> possible_moves;
 
@@ -248,7 +246,6 @@ std::vector<OneMove> MovesGeneration::generateQueenMoves(uint64_t queen_bitboard
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateKnightMoves(uint64_t knight_bitboards) {
     std::vector<OneMove> possible_moves;
 
@@ -285,7 +282,6 @@ std::vector<OneMove> MovesGeneration::generateKnightMoves(uint64_t knight_bitboa
 
     return possible_moves;
 }
-
 std::vector<OneMove> MovesGeneration::generateKingMoves(uint64_t king_bitboard) {
     std::vector<OneMove> possible_moves;
 
@@ -315,11 +311,46 @@ std::vector<OneMove> MovesGeneration::generateKingMoves(uint64_t king_bitboard) 
 
     return possible_moves;
 }
+std::vector<OneMove> MovesGeneration::generateWhiteCastling(uint64_t (&bitboards)[12], bool (&castling)[4]) {
+    std::vector<OneMove> possible_moves;
+    uint64_t unsafe = unsafeForWhite(bitboards);
 
-std::vector<OneMove> MovesGeneration::generateCastlingWhite(uint64_t (&bitboards)[12], bool (&castling)[4]) {
-    return std::vector<OneMove>();
+    if ((unsafe & bitboards[K]) == 0) {
+        if (castling[CASTLE_WK] && ((1ULL<<castle_rooks[CASTLE_WK]) & bitboards[R]) != 0) {
+            if (((occupied|unsafe) & ((1ULL<<61)|(1ULL<<62))) == 0) {
+                possible_moves.emplace_back(7, 4, 7, 6);
+            }
+        }
+
+        if (castling[CASTLE_WQ] && (((1ULL<<castle_rooks[CASTLE_WQ]) & bitboards[R]) != 0)) {
+            if (((occupied|(unsafe & ~(1ULL<<57))) & ((1ULL<<57)|(1ULL<<58)|(1ULL<<59))) == 0) {
+                possible_moves.emplace_back(7, 4, 7, 2);
+            }
+        }
+    }
+
+    return possible_moves;
 }
+std::vector<OneMove> MovesGeneration::generateBlackCastling(uint64_t (&bitboards)[12], bool (&castling)[4]) {
+    std::vector<OneMove> possible_moves;
+    uint64_t unsafe = unsafeForBlack(bitboards);
 
+    if ((unsafe & bitboards[k]) == 0) {
+        if (castling[CASTLE_BK] && ((1ULL<<castle_rooks[CASTLE_BK]) & bitboards[r]) != 0) {
+            if (((occupied|unsafe) & ((1ULL<<5)|(1ULL<<6))) == 0) {
+                possible_moves.emplace_back(0, 4, 0, 6);
+            }
+        }
+
+        if (castling[CASTLE_BQ] && (((1ULL<<castle_rooks[CASTLE_BQ]) & bitboards[r]) != 0)) {
+            if (((occupied|(unsafe & ~(1ULL<<1))) & ((1ULL<<1)|(1ULL<<2)|(1ULL<<3))) == 0) {
+                possible_moves.emplace_back(0, 4, 0, 2);
+            }
+        }
+    }
+
+    return possible_moves;
+}
 
 uint64_t MovesGeneration::unsafeForWhite(uint64_t (&bitboards)[12]) {
     uint64_t unsafe;
@@ -401,7 +432,6 @@ uint64_t MovesGeneration::unsafeForWhite(uint64_t (&bitboards)[12]) {
 
     return unsafe;
 }
-
 uint64_t MovesGeneration::unsafeForBlack(uint64_t (&bitboards)[12]) {
     uint64_t unsafe;
 
@@ -517,6 +547,8 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
 
 
 

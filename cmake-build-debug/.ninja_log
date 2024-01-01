@@ -37,3 +37,17 @@
 4	547	7258415454651821	CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj	6be547d0249aa000
 10	572	7258415454890898	CMakeFiles/ChessAlgorithmBitboards.dir/MovesGeneration.cpp.obj	79c7029dca6901f0
 573	880	7258415457923047	ChessAlgorithmBitboards.exe	9858b521933b50ac
+13	752	7258433973625262	CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj	6be547d0249aa000
+17	816	7258433974273528	CMakeFiles/ChessAlgorithmBitboards.dir/MovesGeneration.cpp.obj	79c7029dca6901f0
+19	922	7258433975350652	CMakeFiles/ChessAlgorithmBitboards.dir/BoardUI.cpp.obj	d356ac1a0610b44
+5	1061	7258433976743340	CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj	f3881be14bd8e25
+1061	1338	7258433979476466	ChessAlgorithmBitboards.exe	9858b521933b50ac
+3	720	7258444195875569	CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj	f3881be14bd8e25
+720	1006	7258444198702269	ChessAlgorithmBitboards.exe	9858b521933b50ac
+11	863	7258462511182273	CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj	6be547d0249aa000
+14	918	7258462511690933	CMakeFiles/ChessAlgorithmBitboards.dir/MovesGeneration.cpp.obj	79c7029dca6901f0
+19	1034	7258462512900786	CMakeFiles/ChessAlgorithmBitboards.dir/BoardUI.cpp.obj	d356ac1a0610b44
+4	1188	7258462514426800	CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj	f3881be14bd8e25
+1188	1502	7258462517448451	ChessAlgorithmBitboards.exe	9858b521933b50ac
+5	1369	7258463094898589	CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj	f3881be14bd8e25
+1370	1920	7258463100497088	ChessAlgorithmBitboards.exe	9858b521933b50ac

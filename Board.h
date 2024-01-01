@@ -11,7 +11,7 @@ class Board {
 public:
     // read left-to-right and top-to-bottom (index by enum PieceType)
     uint64_t bitboards[12];
-    // contains if castling is possible (index by enum CastlingType)
+    // contains if castling is possible (index by enum CastlingType) - default is true
     bool castling[4];
 
     Board();
@@ -22,6 +22,10 @@ public:
 
 private:
     void arrayToBitboards(char (&src_board)[8][8]);
+
+    //call when making a move, RETURNS if castling was performed
+    bool handleCastling(char (&board)[8][8], OneMove move);
+    void updateCastlingBoolsAfterMove(char moved_piece, OneMove move);
 
     static PieceType charToPieceEnum(char char_piece);
     static char pieceEnumToChar(PieceType piece_type);
