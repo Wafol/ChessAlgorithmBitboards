@@ -4,7 +4,7 @@ import pygame
 from piece_textures import PieceTextures
 from chess_board import ChessBoard
 
-FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w'
 
 
 class App:

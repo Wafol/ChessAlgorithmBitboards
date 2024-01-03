@@ -1,0 +1,3 @@
+D:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/cmake-build-debug/CMakeFiles/ChessAlgorithmBitboards.dir
+D:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/cmake-build-debug/CMakeFiles/rebuild_cache.dir

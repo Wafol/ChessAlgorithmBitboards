@@ -1,0 +1,14 @@
+# ninja log v5
+35	931	7259736916472796	CMakeFiles/ChessAlgorithmBitboards.dir/OneMove.cpp.obj	ebdda1331cebb048
+12	1196	7259736919117828	CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj	a16098894d0b9d62
+19	1362	7259736920776575	CMakeFiles/ChessAlgorithmBitboards.dir/BoardUI.cpp.obj	99e150f4bcd4d857
+27	1388	7259736921055807	CMakeFiles/ChessAlgorithmBitboards.dir/MovesGeneration.cpp.obj	99fe66f47de62064
+1	1522	7259736922394256	CMakeFiles/ChessAlgorithmBitboards.dir/Board.cpp.obj	9a5b8ca9a3f8f8b3
+1522	1865	7259736925793982	ChessAlgorithmBitboards.exe	9858b521933b50ac
+6	231	7259738175558731	build.ninja	1ca5a0169816a05f
+11	1120	7259738187144230	CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/OneMove.cpp.obj	6646d0cb5750fee1
+7	1287	7259738188949387	CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj	a16098894d0b9d62
+27	1449	7259738190576924	CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/BoardUI.cpp.obj	a7dcc11c4fa585d4
+36	1510	7259738191215223	CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/MovesGeneration.cpp.obj	a8639c3e56377a17
+19	1547	7259738191594219	CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/Board.cpp.obj	a4a9dea1b5bd3f45
+1547	1891	7259738195003784	ChessAlgorithmBitboards.exe	219e003a85826507
