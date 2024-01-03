@@ -11,9 +11,9 @@ Board::Board() {
             {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'r', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
-            {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+            {'P', 'P', 'P', ' ', ' ', 'P', 'P', 'P'},
             {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}};
 
     arrayToBitboards(board);
@@ -181,10 +181,4 @@ char Board::pieceEnumToChar(PieceType piece_type) {
     auto it = piece_to_char_map.find(piece_type);
     return (it != piece_to_char_map.end()) ? it->second : '.';
 }
-
-
-
-
-
-
 

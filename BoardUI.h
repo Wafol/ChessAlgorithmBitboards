@@ -7,6 +7,8 @@
 
 class BoardUI {
 public:
+    static void initCommunication();
+
     //returns if it was successfull
     static bool handlePlayerMove(std::string move_input, Board &board);
     static void writeInfoToCommunicationFile(Board &, std::vector<OneMove> &possible_moves);

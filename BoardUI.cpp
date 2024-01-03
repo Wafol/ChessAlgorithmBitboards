@@ -5,6 +5,11 @@
 #include "BoardUI.h"
 #include "Board.h"
 
+void BoardUI::initCommunication() {
+    std::fstream file_delete(CPP_TO_PY_FILE, std::ios::out);
+    std::fstream file_delete2(PY_TO_CPP_FILE, std::ios::out);
+}
+
 bool BoardUI::handlePlayerMove(std::string move_input, Board &board) {
     std::transform(move_input.begin(), move_input.end(), move_input.begin(), ::tolower);
     std::vector<char> file_names = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'};
@@ -121,6 +126,8 @@ void BoardUI::drawBitboard(uint64_t bitboard) {
 
     drawBitboards(bitboards, true);
 }
+
+
 
 
 

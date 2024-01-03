@@ -8,6 +8,7 @@
 
 int main() {
     Board board;
+    BoardUI::initCommunication();
 
     //BoardUI::drawBitboards(board.bitboards, false);
 

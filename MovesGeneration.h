@@ -10,6 +10,10 @@
 class MovesGeneration {
 public:
     std::vector<OneMove> generatePossibleMoves(Board &board);
+    std::vector<OneMove> generatePseudoPossibleMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+
+    bool isMoveLegal(OneMove move, uint64_t (&bitboards)[12]);
+
     std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
     std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
 
