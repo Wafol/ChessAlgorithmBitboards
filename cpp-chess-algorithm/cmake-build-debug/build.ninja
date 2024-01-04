@@ -55,29 +55,35 @@ build CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj: CXX_COMPILER__ChessAl
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
   OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
 
-build CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/Board.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/ChessBoard/Board.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
-  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard\Board.cpp.obj.d
+build CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/Board.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/chess-board/Board.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board\Board.cpp.obj.d
   FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
-  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board
 
-build CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/BoardUI.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/ChessBoard/BoardUI.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
-  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard\BoardUI.cpp.obj.d
+build CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/BoardUI.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/chess-board/BoardUI.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board\BoardUI.cpp.obj.d
   FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
-  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board
 
-build CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/MovesGeneration.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/ChessBoard/MovesGeneration.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
-  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard\MovesGeneration.cpp.obj.d
+build CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/MovesGeneration.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/chess-board/MovesGeneration.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board\MovesGeneration.cpp.obj.d
   FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
-  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board
 
-build CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/OneMove.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/ChessBoard/OneMove.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
-  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard\OneMove.cpp.obj.d
+build CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/OneMove.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/chess-board/OneMove.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board\OneMove.cpp.obj.d
   FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
-  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\ChessBoard
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir\chess-board
+
+build CMakeFiles/ChessAlgorithmBitboards.dir/ChessEngine.cpp.obj: CXX_COMPILER__ChessAlgorithmBitboards_unscanned_Debug D$:/Dokumenty/_skola/DlouhodobaMaturitniPrace/ChessBoardProgram/ChessAlgorithmBitboards/cpp-chess-algorithm/ChessEngine.cpp || cmake_object_order_depends_target_ChessAlgorithmBitboards
+  DEP_FILE = CMakeFiles\ChessAlgorithmBitboards.dir\ChessEngine.cpp.obj.d
+  FLAGS = -g -std=gnu++1z -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
+  OBJECT_FILE_DIR = CMakeFiles\ChessAlgorithmBitboards.dir
 
 
 # =============================================================================
@@ -87,7 +93,7 @@ build CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/OneMove.cpp.obj: CXX_COM
 #############################################
 # Link the executable ChessAlgorithmBitboards.exe
 
-build ChessAlgorithmBitboards.exe: CXX_EXECUTABLE_LINKER__ChessAlgorithmBitboards_Debug CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/Board.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/BoardUI.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/MovesGeneration.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/ChessBoard/OneMove.cpp.obj
+build ChessAlgorithmBitboards.exe: CXX_EXECUTABLE_LINKER__ChessAlgorithmBitboards_Debug CMakeFiles/ChessAlgorithmBitboards.dir/main.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/Board.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/BoardUI.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/MovesGeneration.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/chess-board/OneMove.cpp.obj CMakeFiles/ChessAlgorithmBitboards.dir/ChessEngine.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ChessAlgorithmBitboards.dir

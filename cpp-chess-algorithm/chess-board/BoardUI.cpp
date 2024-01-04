@@ -35,7 +35,7 @@ bool BoardUI::handlePlayerMove(std::string move_input, Board &board) {
     return true;
 }
 
-void BoardUI::writeInfoToCommunicationFile(Board &board, std::vector<OneMove> &possible_moves) {
+void BoardUI::writeInfoToCommunicationFile(Board &board) {
     std::ifstream in_file;
     in_file.open(CPP_TO_PY_FILE);
 
@@ -45,13 +45,18 @@ void BoardUI::writeInfoToCommunicationFile(Board &board, std::vector<OneMove> &p
 
     if (content == board.getFENBoard())
         return;
+
     /////////////////////////
     std::ofstream file;
     file.open(CPP_TO_PY_FILE);
 
-    file << board.getFENBoard() + "\n";
+    file << board.getFENBoard();
+    if (board.on_turn == WHITE)
+        file << " w\n";
+    else if (board.on_turn == BLACK)
+        file << " b\n";
 
-    for (OneMove move : possible_moves) {
+    for (OneMove move : board.possible_moves) {
         file << move.toString() << "\n";
     }
 

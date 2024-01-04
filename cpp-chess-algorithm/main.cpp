@@ -1,25 +1,30 @@
 #include <iostream>
 #include <bitset>
 #include <fstream>
-#include "ChessBoard/Board.h"
-#include "ChessBoard/BoardUI.h"
-#include "ChessBoard/MovesGeneration.h"
-#include "ChessBoard/OneMove.h"
+#include "chess-board/Board.h"
+#include "chess-board/BoardUI.h"
+#include "chess-board/MovesGeneration.h"
+#include "chess-board/OneMove.h"
+#include "ChessEngine.h"
 
 int main() {
     Board board;
     BoardUI::initCommunication();
 
-    MovesGeneration moves_gener;
-    std::vector<OneMove> possible_moves = moves_gener.generatePossibleMoves(board);
-    BoardUI::writeInfoToCommunicationFile(board, possible_moves);
+    BoardUI::writeInfoToCommunicationFile(board);
 
     while (true) {
         if (BoardUI::checkForMoveFromPython(board)) {
-            possible_moves = moves_gener.generatePossibleMoves(board);
-            BoardUI::writeInfoToCommunicationFile(board, possible_moves);
 
-            BoardUI::drawBitboard(moves_gener.unsafeForBlack(board.bitboards));
+            OneMove best_move = ChessEngine::getBestMove(board, board.on_turn);
+            board.movePiece(best_move);
+
+            BoardUI::writeInfoToCommunicationFile(board);
+
+            if (board.game_over) {
+                std::cout << "GAME OVER" << std::endl;
+                return 0;
+            }
         }
     }
 

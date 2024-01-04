@@ -3,8 +3,21 @@
 #include "MovesGeneration.h"
 #include "BoardUI.h"
 
-std::vector<OneMove> MovesGeneration::generatePossibleMoves(Board &board) {
-    std::vector<OneMove> pseudo_poss_moves = generatePseudoPossibleMoves(board.bitboards, board.castling);
+std::vector<OneMove> MovesGeneration::generatePossibleMoves(Board &board, PlayerType for_player) {
+    std::vector<OneMove> pseudo_poss_moves;
+
+    switch (for_player) {
+        case WHITE:
+            pseudo_poss_moves = generatePseudoWhiteMoves(board.bitboards, board.castling);
+            break;
+        case BLACK:
+            pseudo_poss_moves = generatePseudoBlackMoves(board.bitboards, board.castling);
+            break;
+        case BOTH:
+            pseudo_poss_moves = generatePseudoPossibleMoves(board.bitboards, board.castling);
+            break;
+    }
+
     std::vector<OneMove> possible_moves;
 
     for (OneMove move : pseudo_poss_moves) {
@@ -20,25 +33,18 @@ bool MovesGeneration::isMoveLegal(OneMove move, uint64_t (&bitboards)[12]) {
     uint64_t moved_bitboards[12];
     std::copy(std::begin(bitboards), std::end(bitboards), std::begin(moved_bitboards));
 
-    for (int i = 0; i < 12; i++) {
-        if (((1ULL << (move.j1 + move.i1 * 8)) & bitboards[i]) != 0) { //if move is from i bitboard
-            moved_bitboards[i] &= ~(1ULL << (move.j1 + move.i1 * 8));
-            moved_bitboards[i] |= (1ULL << (move.j2 + move.i2 * 8));
+    PieceType moved_piece = Board::makeMoveInBitboards(move ,moved_bitboards);
 
-            if (i <= 5) { //WHITE piece
-                return !(unsafeForWhite(moved_bitboards)&moved_bitboards[K]);
-            } else { //BLACK piece
-                return !(unsafeForBlack(moved_bitboards)&moved_bitboards[k]);
-            }
-        }
+    if (moved_piece <= 5) { //WHITE piece
+        return !(unsafeForWhite(moved_bitboards)&moved_bitboards[K]);
+    } else { //BLACK piece
+        return !(unsafeForBlack(moved_bitboards)&moved_bitboards[k]);
     }
-
-    return false;
 }
 
 std::vector<OneMove> MovesGeneration::generatePseudoPossibleMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
-    std::vector<OneMove> white_moves = generateWhiteMoves(bitboards, castling);
-    std::vector<OneMove> black_moves = generateBlackMoves(bitboards, castling);
+    std::vector<OneMove> white_moves = generatePseudoWhiteMoves(bitboards, castling);
+    std::vector<OneMove> black_moves = generatePseudoBlackMoves(bitboards, castling);
 
     std::vector<OneMove> all_moves;
     all_moves.insert(all_moves.end(), white_moves.begin(), white_moves.end());
@@ -46,7 +52,7 @@ std::vector<OneMove> MovesGeneration::generatePseudoPossibleMoves(uint64_t (&bit
     return all_moves;
 }
 
-std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
+std::vector<OneMove> MovesGeneration::generatePseudoWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
     my_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
     enemy_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
     enemy_king = bitboards[k];
@@ -72,7 +78,7 @@ std::vector<OneMove> MovesGeneration::generateWhiteMoves(uint64_t (&bitboards)[1
 
     return white_moves;
 }
-std::vector<OneMove> MovesGeneration::generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
+std::vector<OneMove> MovesGeneration::generatePseudoBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]) {
     my_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
     enemy_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
     enemy_king = bitboards[K];
@@ -589,6 +595,8 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
 
 
 

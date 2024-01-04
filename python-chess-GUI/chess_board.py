@@ -15,16 +15,25 @@ class ChessBoard:
         self._pieces_arr = ()  # 8x8 char array, with pieces KQP... and blank spots ' '
         self._fen = ''
         self._poss_moves = ()  # unordered tuple of tuples ((1,2,2,3), ...)
+        self._on_turn = ''
 
         self._selected_square = ()
 
     def get_data_from_cpp(self) -> str:
         f = open(self.CPP_TO_PY_FILE, "r")
 
-        # 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'
+        # 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w'
         line = f.readline()
         self._fen = line.replace('\n', '')
+        self.update_board_by_fen(self._fen)
 
+        # generate possible moves
+        if len(self._fen.split()) < 2:
+            print('\n\nWRONG FEN FORMAT SEND\n\n')
+            print(self._fen)
+            return
+
+        self._on_turn = self._fen.split(' ')[1]
         self._poss_moves = ()
 
         while line:
@@ -32,7 +41,9 @@ class ChessBoard:
 
             if len(line) == 4:
                 move = (int(line[0]), int(line[1]), int(line[2]), int(line[3]))
-                self._poss_moves = self._poss_moves + (move,)
+
+                if (self._pieces_arr[move[0]][move[1]].isupper() and self._on_turn == 'w') or (self._pieces_arr[move[0]][move[1]].islower() and self._on_turn == 'b'):
+                    self._poss_moves = self._poss_moves + (move,)
 
         return self._fen
 
@@ -81,7 +92,8 @@ class ChessBoard:
 
                 pygame.draw.rect(self._screen, color, (j*self._square_size, i*self._square_size, self._square_size, self._square_size))
 
-    def update_pieces_arr_by_fen(self, fen: str):
+    def update_board_by_fen(self, fen: str):
+        # update the board
         self._pieces_arr = [[' ' for _ in range(8)] for _ in range(8)]
         fen = fen.split('/')
 
@@ -90,6 +102,9 @@ class ChessBoard:
             j = 0
 
             for c in row:
+                if c == ' ':
+                    return
+
                 if c.isnumeric():
                     j += int(c)
                 else:

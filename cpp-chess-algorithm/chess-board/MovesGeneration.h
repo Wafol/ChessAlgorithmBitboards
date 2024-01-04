@@ -9,13 +9,7 @@
 
 class MovesGeneration {
 public:
-    std::vector<OneMove> generatePossibleMoves(Board &board);
-    std::vector<OneMove> generatePseudoPossibleMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
-
-    bool isMoveLegal(OneMove move, uint64_t (&bitboards)[12]);
-
-    std::vector<OneMove> generateWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
-    std::vector<OneMove> generateBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generatePossibleMoves(Board &board, PlayerType for_player);
 
 private:
     uint64_t rank_masks[8] = { 0xFF00000000000000ULL, 0xFF000000000000ULL, 0xFF0000000000ULL, 0xFF00000000ULL, 0xFF000000ULL, 0xFF0000ULL, 0xFF00ULL, 0xFFULL };
@@ -43,6 +37,12 @@ private:
     const uint64_t castle_rooks[4] = {63, 56, 7, 0};
     ////////////////////////////
 
+    std::vector<OneMove> generatePseudoPossibleMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    bool isMoveLegal(OneMove move, uint64_t (&bitboards)[12]);
+
+    std::vector<OneMove> generatePseudoWhiteMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+    std::vector<OneMove> generatePseudoBlackMoves(uint64_t (&bitboards)[12], bool (&castling)[4]);
+
     std::vector<OneMove> generateWhitePawnMoves(uint64_t wpawn_bitboard);
     std::vector<OneMove> generateBlackPawnMoves(uint64_t bpawn_bitboard);
     std::vector<OneMove> generateRookMoves(uint64_t rook_bitboard);
@@ -52,7 +52,7 @@ private:
     std::vector<OneMove> generateKingMoves(uint64_t king_bitboard);
     std::vector<OneMove> generateWhiteCastling(uint64_t (&bitboards)[12], bool (&castling)[4]);
     std::vector<OneMove> generateBlackCastling(uint64_t (&bitboards)[12], bool (&castling)[4]);
-public:
+
     uint64_t unsafeForWhite(uint64_t (&bitboards)[12]);
     uint64_t unsafeForBlack(uint64_t (&bitboards)[12]);
 

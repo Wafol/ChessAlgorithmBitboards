@@ -4,11 +4,13 @@ project(ChessAlgorithmBitboards)
 set(CMAKE_CXX_STANDARD 17)
 
 add_executable(ChessAlgorithmBitboards main.cpp
-        ChessBoard/Board.cpp
-        ChessBoard/BoardUI.h
-        ChessBoard/BoardUI.cpp
-        ChessBoard/MovesGeneration.cpp
-        ChessBoard/OneMove.h
-        ChessBoard/OneMove.cpp
-        ChessBoard/ChessEnums.h
+        chess-board/Board.cpp
+        chess-board/BoardUI.h
+        chess-board/BoardUI.cpp
+        chess-board/MovesGeneration.cpp
+        chess-board/OneMove.h
+        chess-board/OneMove.cpp
+        chess-board/ChessEnums.h
+        ChessEngine.cpp
+        ChessEngine.h
 )

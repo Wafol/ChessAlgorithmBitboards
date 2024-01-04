@@ -12,4 +12,8 @@ typedef enum CastlingType {
     CASTLE_WK = 0, CASTLE_WQ = 1, CASTLE_BK = 2, CASTLE_BQ = 3
 } CastlingType;
 
+typedef enum PlayerType {
+    WHITE = 0, BLACK = 1, BOTH = 2
+} PlayerType;
+
 #endif //CHESSALGORITHMBITBOARDS_CHESSENUMS_H

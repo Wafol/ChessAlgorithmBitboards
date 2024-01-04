@@ -39,7 +39,7 @@ class App:
 
         #### COMMUNICATION ####
         fen = self._chess_board.get_data_from_cpp()
-        self._chess_board.update_pieces_arr_by_fen(fen)
+
         #######################
 
         self._chess_board.draw_board()
