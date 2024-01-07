@@ -63,7 +63,10 @@ void BoardUI::writeInfoToCommunicationFile(Board &board) {
     file.close();
 }
 
-bool BoardUI::checkForMoveFromPython(Board &board) {
+OneMove BoardUI::getMoveFromPython(Board &board) {
+    OneMove move;
+    move.valid = false;
+
     std::ifstream file;
     file.open(PY_TO_CPP_FILE);
 
@@ -71,17 +74,20 @@ bool BoardUI::checkForMoveFromPython(Board &board) {
     file >> content;
 
     if (!content.empty()) {
-        OneMove move(content[0] - '0', content[1] - '0', content[2] - '0', content[3] - '0');
+        move.i1 = content[0] - '0';
+        move.j1 = content[1] - '0';
+        move.i2 = content[2] - '0';
+        move.j2 = content[3] - '0';
+        move.valid = true;
 
-        board.movePiece(move);
         std::fstream file_delete(PY_TO_CPP_FILE, std::ios::out);
         file.close();
 
-        return true;
+        return move;
     }
 
     file.close();
-    return false;
+    return move;
 }
 
 void BoardUI::drawBoard(char (&board)[8][8], bool show_indexes) {

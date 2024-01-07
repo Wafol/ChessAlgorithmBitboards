@@ -11,6 +11,8 @@ class MovesGeneration {
 public:
     std::vector<OneMove> generatePossibleMoves(Board &board, PlayerType for_player);
 
+    bool isWhiteKingInCheck(uint64_t (&bitboards)[12]);
+    bool isBlackKingInCheck(uint64_t (&bitboards)[12]);
 private:
     uint64_t rank_masks[8] = { 0xFF00000000000000ULL, 0xFF000000000000ULL, 0xFF0000000000ULL, 0xFF00000000ULL, 0xFF000000ULL, 0xFF0000ULL, 0xFF00ULL, 0xFFULL };
     uint64_t file_masks[8] { 0x101010101010101ULL, 0x202020202020202ULL, 0x404040404040404ULL, 0x808080808080808ULL, 0x1010101010101010ULL, 0x2020202020202020ULL, 0x4040404040404040ULL, 0x8080808080808080ULL };
@@ -20,11 +22,11 @@ private:
     uint64_t anti_diag_masks[15] = { 0x1ULL, 0x102ULL, 0x10204ULL, 0x1020408ULL, 0x102040810ULL, 0x10204081020ULL, 0x1020408102040ULL, 0x102040810204080ULL, 0x204081020408000ULL, 0x408102040800000ULL, 0x810204080000000ULL, 0x1020408000000000ULL, 0x2040800000000000ULL, 0x4080000000000000ULL, 0x8000000000000000ULL };
 
     //////helper bitboards//////
-    uint64_t my_pieces;
-    uint64_t enemy_pieces;
-    uint64_t enemy_king;
-    uint64_t empty;
-    uint64_t occupied;
+    uint64_t my_pieces = 0;
+    uint64_t enemy_pieces = 0;
+    uint64_t enemy_king = 0;
+    uint64_t empty = 0;
+    uint64_t occupied = 0;
 
     //this var stores moves when knight is on position i=5, j=5
     const uint64_t knight_span = 5802888705324613632ULL;

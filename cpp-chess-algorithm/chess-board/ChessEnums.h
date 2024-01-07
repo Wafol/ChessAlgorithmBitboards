@@ -16,4 +16,8 @@ typedef enum PlayerType {
     WHITE = 0, BLACK = 1, BOTH = 2
 } PlayerType;
 
+typedef enum GameOver {
+    WHITE_WINS, BLACK_WINS, DRAW, NOT_OVER
+} GameOver;
+
 #endif //CHESSALGORITHMBITBOARDS_CHESSENUMS_H

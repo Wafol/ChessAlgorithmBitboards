@@ -1,4 +1,5 @@
 #include "Board.h"
+#include "ChessEnums.h"
 #include "MovesGeneration.h"
 #include <iostream>
 #include <cstring>
@@ -6,11 +7,12 @@
 
 Board::Board() {
     memset(bitboards, 0, sizeof(bitboards));
+    memset(last_bitboards, 0, sizeof(last_bitboards));
     memset(castling, true, sizeof(castling));
 
     char board[8][8] = {
-            {'r', 'n', 'b', ' ', 'k', ' ', ' ', ' '},
-            {'p', 'p', 'p', ' ', ' ', ' ', ' ', 'p'},
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -18,10 +20,30 @@ Board::Board() {
             {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
             {'R', 'N', 'B', 'Q', 'K', 'B', 'N', 'R'}};
 
+    char boardx[8][8] = {
+            {'r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'},
+            {'p', 'p', ' ', 'p', ' ', 'p', 'p', 'p'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', 'p', ' ', 'p', ' ', ' ', ' '},
+            {' ', 'P', ' ', ' ', ' ', 'Q', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'P', ' ', 'P', 'P', 'P', 'P', 'P', 'P'},
+            {'R', 'N', 'B', ' ', 'K', 'B', 'N', 'R'}};
+
+    char boards[8][8] = {
+            {' ', ' ', 'K', ' ', 'k', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', 'b', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'P', ' ', ' ', ' '},
+            {' ', 'r', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}};
+
     arrayToBitboards(board);
+    std::copy(std::begin(bitboards), std::end(bitboards), std::begin(last_bitboards));
 
     on_turn = WHITE;
-    game_over = false;
 
     MovesGeneration moves_gener;
     possible_moves = moves_gener.generatePossibleMoves(*this, BOTH);
@@ -62,34 +84,14 @@ std::string Board::getFENBoard() {
 }
 
 void Board::movePiece(OneMove move) {
-    if (game_over)
-        return;
+    std::copy(std::begin(bitboards), std::end(bitboards), std::begin(last_bitboards));
 
     if (!makeCastlingMove(bitboards, move))
         makeMoveInBitboards(move, bitboards);
+}
 
-    /*char board[8][8];
-    bitboardsToArray(board, bitboards);
-
-    if (!handleCastling(board, move)) {
-        char mem = board[move.i1][move.j1];
-        board[move.i1][move.j1] = ' ';
-        board[move.i2][move.j2] = mem;
-    }
-
-    arrayToBitboards(board);*/
-
-    //CHECK control
-    MovesGeneration moves_gener;
-    std::vector<OneMove> possible_white_moves =  moves_gener.generatePossibleMoves(*this, WHITE);
-    std::vector<OneMove> possible_black_moves =  moves_gener.generatePossibleMoves(*this, BLACK);
-    game_over = (possible_white_moves.empty() || possible_black_moves.empty());
-
-    possible_moves = {};
-    possible_moves.insert(possible_moves.end(), possible_white_moves.begin(), possible_white_moves.end());
-    possible_moves.insert(possible_moves.end(), possible_black_moves.begin(), possible_black_moves.end());
-
-    on_turn = static_cast<PlayerType>(!on_turn); //switch current player
+void Board::undoLastMove() {
+    std::copy(std::begin(last_bitboards), std::end(last_bitboards), std::begin(bitboards));
 }
 
 PieceType Board::makeMoveInBitboards(OneMove move, uint64_t (&bitboards)[12]) {
@@ -109,6 +111,38 @@ PieceType Board::makeMoveInBitboards(OneMove move, uint64_t (&bitboards)[12]) {
     }
 
     return moved_piece;
+}
+
+void Board::updatePossibleMoves() {
+    MovesGeneration moves_gener;
+    possible_moves = moves_gener.generatePossibleMoves(*this, BOTH);
+}
+
+GameOver Board::isCheckMate() {
+    GameOver game_over = NOT_OVER;
+
+    MovesGeneration moves_gener;
+    std::vector<OneMove> possible_white_moves =  moves_gener.generatePossibleMoves(*this, WHITE);
+    std::vector<OneMove> possible_black_moves =  moves_gener.generatePossibleMoves(*this, BLACK);
+
+    if (possible_white_moves.empty() && isPlayerInCheck(WHITE))
+        game_over = BLACK_WINS;
+    else if (possible_black_moves.empty() && isPlayerInCheck(BLACK))
+        game_over = WHITE_WINS;
+    else if ((possible_white_moves.empty() && !isPlayerInCheck(WHITE)) || (possible_black_moves.empty() && !isPlayerInCheck(BLACK)))
+        game_over = DRAW;
+
+    return game_over;
+}
+
+bool Board::isPlayerInCheck(PlayerType player) {
+    MovesGeneration moves_gener;
+
+    if (player == WHITE) {
+        return moves_gener.isWhiteKingInCheck(bitboards);
+    } else {
+        return moves_gener.isBlackKingInCheck(bitboards);
+    }
 }
 
 bool Board::makeCastlingMove(uint64_t (&bitboards)[12], OneMove move) {
@@ -241,4 +275,11 @@ char Board::pieceEnumToChar(PieceType piece_type) {
     auto it = piece_to_char_map.find(piece_type);
     return (it != piece_to_char_map.end()) ? it->second : '.';
 }
+
+
+
+
+
+
+
 

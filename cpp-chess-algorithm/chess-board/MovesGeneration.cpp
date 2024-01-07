@@ -36,9 +36,9 @@ bool MovesGeneration::isMoveLegal(OneMove move, uint64_t (&bitboards)[12]) {
     PieceType moved_piece = Board::makeMoveInBitboards(move ,moved_bitboards);
 
     if (moved_piece <= 5) { //WHITE piece
-        return !(unsafeForWhite(moved_bitboards)&moved_bitboards[K]);
+        return !isWhiteKingInCheck(moved_bitboards);
     } else { //BLACK piece
-        return !(unsafeForBlack(moved_bitboards)&moved_bitboards[k]);
+        return !isBlackKingInCheck(moved_bitboards);
     }
 }
 
@@ -394,6 +394,13 @@ std::vector<OneMove> MovesGeneration::generateBlackCastling(uint64_t (&bitboards
     return possible_moves;
 }
 
+bool MovesGeneration::isWhiteKingInCheck(uint64_t (&bitboards)[12]) {
+    return unsafeForWhite(bitboards)&bitboards[K];
+}
+bool MovesGeneration::isBlackKingInCheck(uint64_t (&bitboards)[12]) {
+    return unsafeForBlack(bitboards)&bitboards[k];
+}
+
 uint64_t MovesGeneration::unsafeForWhite(uint64_t (&bitboards)[12]) {
     my_pieces = (bitboards[P]|bitboards[R]|bitboards[N]|bitboards[B]|bitboards[Q]|bitboards[K]);
     enemy_pieces = (bitboards[p]|bitboards[r]|bitboards[n]|bitboards[b]|bitboards[q]|bitboards[k]);
@@ -595,6 +602,9 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     r <<= s; // shift when v's highest bits are zero
     return r;
 }
+
+
+
 
 
 

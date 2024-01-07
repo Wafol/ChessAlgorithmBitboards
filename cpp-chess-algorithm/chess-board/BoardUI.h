@@ -12,8 +12,8 @@ public:
     //returns if it was successful
     static bool handlePlayerMove(std::string move_input, Board &board);
     static void writeInfoToCommunicationFile(Board &board);
-    //returns true if the move was updated
-    static bool checkForMoveFromPython(Board &board);
+    //returns valid=true move if it recieves move from py
+    static OneMove getMoveFromPython(Board &board);
 
     //if show_indexes=false, then it will draw normal chess description
     static void drawBoard(char (&board)[8][8], bool show_indexes = false);

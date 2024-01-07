@@ -8,6 +8,9 @@
 
 class OneMove {
 public:
+    //oznacuje jestli je pohyb platny nebo ne (tzn. jestli ho pouzivat nebo ne)
+    bool valid = true;
+
     uint8_t i1;
     uint8_t j1;
     uint8_t i2;
