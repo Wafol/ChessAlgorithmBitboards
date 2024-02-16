@@ -1,6 +1,5 @@
 #include "ChessEngine.h"
 #include "chess-board/MovesGeneration.h"
-#include "chess-board/BoardUI.h"
 #include <cstdlib>
 #include <iostream>
 

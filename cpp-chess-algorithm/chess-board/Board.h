@@ -10,7 +10,7 @@
 
 class Board {
 public:
-    // read left-to-right and top-to-bottom (index by enum PieceType)
+    // read bitboards left-to-right and top-to-bottom !LSB is first! (index by enum PieceType)
     uint64_t bitboards[12];
     // contains if castling is possible (index by enum CastlingType) - default is true
     bool castling[4];
