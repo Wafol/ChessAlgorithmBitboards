@@ -606,7 +606,7 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
 uint64_t MovesGeneration::whatCanBeOccupiedByWhite(Board &board) {
     uint64_t maybe_occupied = 0;
 
-    for (int i = 0; i < 12; i++)
+    for (int i = 0; i < 6; i++)
         maybe_occupied |= board.bitboards[i];
 
     std::vector<OneMove> pseudo_white_moves = generatePseudoWhiteMoves(board.bitboards, board.castling);
