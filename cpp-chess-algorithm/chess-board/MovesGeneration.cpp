@@ -592,7 +592,7 @@ uint64_t MovesGeneration::reverseBits(uint64_t x) {
     //https://graphics.stanford.edu/~seander/bithacks.html#BitReverseObvious
 
     uint64_t r = x; // r will be reversed bits of v; first get LSB of v
-    int s = sizeof(x) * 64 - 1; // extra shift needed at end
+    int s = sizeof(x) * 8 - 1; // extra shift needed at end
 
     for (x >>= 1; x; x >>= 1) {
         r <<= 1;
