@@ -610,7 +610,15 @@ uint64_t MovesGeneration::whatCanBeOccupiedByWhite(Board &board) {
         maybe_occupied |= board.bitboards[i];
 
     std::vector<OneMove> pseudo_white_moves = generatePseudoWhiteMoves(board.bitboards, board.castling);
-    for (OneMove move : pseudo_white_moves)
+    std::vector<OneMove> possible_moves;
+
+    for (OneMove move : pseudo_white_moves) {
+        if (isMoveLegal(move, board.bitboards)) {
+            possible_moves.push_back(move);
+        }
+    }
+
+    for (OneMove move : possible_moves)
         maybe_occupied |= 1ULL<<(move.j2 + move.i2*8);
 
     return maybe_occupied;

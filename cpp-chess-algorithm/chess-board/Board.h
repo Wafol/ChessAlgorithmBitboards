@@ -32,6 +32,7 @@ public:
     GameOver isCheckMate();
 
     bool isPlayerInCheck(PlayerType player);
+    bool isMoveAttack(OneMove move);
 
 private:
     //this var stores state of board before last move

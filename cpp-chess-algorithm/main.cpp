@@ -12,7 +12,9 @@ int main() {
     ChessEngine chess_engine;
     BoardUI::initCommunication();
 
-    //std::cout << chess_engine.evaluatePosition(board) << std::endl;
+    //BoardUI::drawBitboard(0x9100810000000000);
+    //BoardUI::drawBitboard(0x5100810000000000);
+    //
     //return 0;
 
     BoardUI::writeInfoToCommunicationFile(board);

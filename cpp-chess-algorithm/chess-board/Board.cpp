@@ -40,7 +40,18 @@ Board::Board() {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}};
 
-    arrayToBitboards(board);
+    char test_board[8][8] = {
+            {' ', ' ', ' ', ' ', 'k', ' ', ' ', 'r'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '}};
+
+
+    arrayToBitboards(test_board);
     std::copy(std::begin(bitboards), std::end(bitboards), std::begin(last_bitboards));
 
     on_turn = WHITE;
@@ -143,6 +154,15 @@ bool Board::isPlayerInCheck(PlayerType player) {
     } else {
         return moves_gener.isBlackKingInCheck(bitboards);
     }
+}
+
+bool Board::isMoveAttack(OneMove move) {
+    for (int i = 0; i < 12; i++) {
+        if (((1ULL << (move.j2 + move.i2*8)) & bitboards[i]) != 0) //if opponent is on destination square (=> erase it)
+            return true;
+    }
+
+    return false;
 }
 
 bool Board::makeCastlingMove(uint64_t (&bitboards)[12], OneMove move) {
